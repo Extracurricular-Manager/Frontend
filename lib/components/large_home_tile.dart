@@ -1,34 +1,31 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeTile extends StatelessWidget {
-  const HomeTile({Key? key}) : super(key: key);
+class LargeHomeTile extends StatelessWidget {
+  const LargeHomeTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var elev = 5.0;
     return Card(
       child: InkWell(
         onTap:(){},
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
               Icon(Icons.accessibility, size: 30,),
               Text("Titre",
                   style:TextStyle(
                       fontSize: 20,
-                  fontWeight: FontWeight.bold)),
+                      fontWeight: FontWeight.bold)),
               Spacer(),
               Text("sous-titre", style:TextStyle(color: Colors.grey))
             ],
           ),
         ),
       ),
-      elevation: elev,
+      elevation: 5,
     );
   }
 }
