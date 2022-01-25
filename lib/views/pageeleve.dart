@@ -4,43 +4,61 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:provider/provider.dart';
 
+/*  class PageEleveState extends State<PageEleve> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  } 
+
+  // ···
+}*/
+
+//class PageEleve extends StatefulWidget {
 class PageEleve extends StatelessWidget {
   const PageEleve({required String title});
+  @override
+  // PageEleveState createState() => _FavoriteWidgetState();
 
   @override
   Widget build(BuildContext context) {
     //List<String> myList = List.generate(3, (index) => "Theo");
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: 'Leading Icon',
-          icon: const Icon(
-            Icons.arrow_back,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          shadowColor: Colors.transparent,
+          leading: IconButton(
+            tooltip: 'Leading Icon',
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
+            onPressed: () {
+              // To do
+            },
           ),
-          onPressed: () {
-            // To do
-          },
-        ),
-        backgroundColor: const Color(0xFF045824),
-        //title: const Text('Page Eleve'),
-        title: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 0.5),
-                  decoration: BoxDecoration(
-                      //color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white)),
-                  child: getAllClasses(context))
-            ],
+          backgroundColor: const Color(0xFF214A1F),
+          //title: const Text('Page Eleve'),
+          title: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 0.5),
+                    decoration: BoxDecoration(
+                        //color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white)),
+                    child: getAllClasses(context))
+              ],
+            ),
           ),
-        ),
 /*         bottom: PreferredSize(
             child: Container(
                 padding:
@@ -58,54 +76,85 @@ class PageEleve extends StatelessWidget {
                       prefixIcon: Icon(Icons.search)),
                 )),
             preferredSize: Size.fromHeight(4.0)), */
-      ),
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Center(
-              child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ListTile(
-                      // leading: const Icon(Icons.people),
-                      title: const Text("Théo Giraudet"),
-                      subtitle: Row(
-                        children: const <Widget>[
-                          Icon(Icons.check_circle_outline,
-                              color: Color(0xFF045824)),
-                          Text(
-                            'Présent   ',
-                            style: TextStyle(
-                              color: Color(0xFF047212),
+        ),
+        body: ListView(
+          children: [
+            Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 0.5),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF214A1F),
+                ),
+                child: const TextField(
+                    decoration: InputDecoration(
+                        hintTextDirection: TextDirection.ltr,
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Rechercher',
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none
+
+                        //borderRadius: BorderRadius.all(Radius.circular(2.0)),
+
+                        //  focusedBorder: UnderlineInputBorder(
+                        // borderSide:
+                        //     BorderSide(color: Colors.white, width: 0.0),
+                        //borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                        // gapPadding: 2.0,
+                        // )
+                        ))),
+            ListView.builder(
+                // itemCount: 10,
+                itemCount: 20,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            // leading: const Icon(Icons.people),
+                            title: const Text("Théo Giraudet"),
+                            subtitle: Row(
+                              children: const <Widget>[
+                                Icon(Icons.check_circle_outline,
+                                    color: Color(0xFF045824)),
+                                Text(
+                                  'Présent   ',
+                                  style: TextStyle(
+                                    color: Color(0xFF047212),
+                                  ),
+                                ),
+                                Icon(Icons.radio_button_unchecked,
+                                    color: Colors.red), // Pas top
+                                Text(
+                                  'Cantine',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
                             ),
+                            onTap: () => {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Partie d'Arthur")))
+                            },
+                            /* onTap: () => Navigator.pushNamed(context, '/eleve',
+                            arguments: "ThéoGiraudet") */
                           ),
-                          Icon(Icons.radio_button_unchecked,
-                              color: Colors.red), // Pas top
-                          Text(
-                            'Cantine',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                           ),
                         ],
                       ),
-                      onTap: () => {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Partie d'Arthur")))
-                      },
-                      /* onTap: () => Navigator.pushNamed(context, '/eleve',
-                            arguments: "ThéoGiraudet") */
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-    );
+                  );
+                }),
+          ],
+        ));
   }
 }
 
@@ -136,6 +185,7 @@ DropdownButton getAllClasses(BuildContext context) {
     dropdownColor: Colors.white,
   );
 }
+
 
 //void setState(Null Function() param0) {}
 
