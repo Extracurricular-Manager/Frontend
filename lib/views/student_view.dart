@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontendmobile/components/change_time.dart';
 //import 'package:provider/provider.dart';
 
 /*  class PageEleveState extends State<PageEleve> {
@@ -112,9 +113,12 @@ class StudentView extends StatelessWidget {
                               ],
                             ),
                             onTap: () => {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Partie d'Arthur")))
+                              showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return horairePage();
+                                  }
+                              )
                             },
                             /* onTap: () => Navigator.pushNamed(context, '/eleve',
                             arguments: "ThéoGiraudet") */
@@ -160,10 +164,9 @@ DropdownButton getAllClasses(BuildContext context) {
   );
 }
 
-
 //void setState(Null Function() param0) {}
 
-//body search 
+//body search
 /*        body: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0.5),
             decoration: BoxDecoration(
@@ -225,7 +228,6 @@ DropdownButton getAllClasses(BuildContext context) {
     );
   }
 } */
-
 
 /* class myList {
   late final String name;
