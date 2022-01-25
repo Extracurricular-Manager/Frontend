@@ -33,15 +33,6 @@ class StudentView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           shadowColor: Colors.transparent,
-          leading: IconButton(
-            tooltip: 'Leading Icon',
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/home_view');
-            },
-          ),
           backgroundColor: const Color(0xFF214A1F),
           //title: const Text('Page Eleve'),
           title: Center(
