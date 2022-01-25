@@ -55,7 +55,8 @@ class _StudentsListState extends State<StudentsList>{
           ListView.builder(
             itemCount: widget.students.length,
             itemBuilder: (context, index) {
-              return CheckboxListTile(
+              return Card(
+                child: CheckboxListTile(
                 title: Text(
                   widget.students[index],
                   style: const TextStyle(color: Colors.black),
@@ -66,8 +67,14 @@ class _StudentsListState extends State<StudentsList>{
                     _isChecked = value!;
                   });
                 },
-              );
+              ),);
             },
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 60,
+            decoration: const BoxDecoration(
+                shape: BoxShape.rectangle, color: Color(0xFF214A1F)),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10.0, left: 10.0),
@@ -86,12 +93,7 @@ class _StudentsListState extends State<StudentsList>{
                       border: InputBorder.none),
                 )),
           ),
-          Ink(
-            width: MediaQuery.of(context).size.width,
-            height: 60,
-            decoration: const BoxDecoration(
-                shape: BoxShape.rectangle, color: Color(0xFF214A1F)),
-          ),
+
         ]));
   }
 }
