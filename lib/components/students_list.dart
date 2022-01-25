@@ -12,8 +12,7 @@ class StudentsList extends StatefulWidget {
   State<StudentsList> createState() => _StudentsListState();
 }
 
-class _StudentsListState extends State<StudentsList>{
-
+class _StudentsListState extends State<StudentsList> {
   bool _isChecked = false;
 
   @override
@@ -21,7 +20,7 @@ class _StudentsListState extends State<StudentsList>{
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
-            leading: IconButton(
+/*             leading: IconButton(
               tooltip: 'Leading Icon',
               icon: const Icon(
                 Icons.arrow_back_ios,
@@ -29,7 +28,7 @@ class _StudentsListState extends State<StudentsList>{
               onPressed: () {
                 // To do
               },
-            ),
+            ), */
             backgroundColor: const Color(0xFF214A1F),
             title: Text(widget.title),
             shadowColor: Colors.transparent,
@@ -57,17 +56,18 @@ class _StudentsListState extends State<StudentsList>{
             itemBuilder: (context, index) {
               return Card(
                 child: CheckboxListTile(
-                title: Text(
-                  widget.students[index],
-                  style: const TextStyle(color: Colors.black),
+                  title: Text(
+                    widget.students[index],
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                  value: _isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isChecked = value!;
+                    });
+                  },
                 ),
-                value: _isChecked,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isChecked = value!;
-                  });
-                },
-              ),);
+              );
             },
           ),
           Container(
@@ -93,7 +93,6 @@ class _StudentsListState extends State<StudentsList>{
                       border: InputBorder.none),
                 )),
           ),
-
         ]));
   }
 }
