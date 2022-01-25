@@ -8,6 +8,7 @@ import 'package:frontendmobile/components/large_home_tile.dart';
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,7 @@ class HomeView extends StatelessWidget {
                   style:TextStyle(
                       fontWeight: FontWeight.bold,
                   fontSize: 20)),
-              backgroundColor: Colors.green,
+              backgroundColor: const Color(0xFF214A1F),
               shadowColor: Colors.transparent,
             actions: [ Padding(
               padding: const EdgeInsets.only(right: 10.0),
@@ -25,7 +26,7 @@ class HomeView extends StatelessWidget {
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
-                      Icons.exit_to_app,
+                      Icons.sensor_door_outlined,
                       size: 26.0,
                     ),
                   )
@@ -36,22 +37,14 @@ class HomeView extends StatelessWidget {
         ),
         body: Stack(children: [
           Column(
-            children: [
-              Expanded(child:GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width~/200,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                padding: const EdgeInsets.only(left:10,right:10),
-                children: const [HomeTile(),HomeTile(),HomeTile(),HomeTile(),HomeTile()],)
+            children: const [
+               Expanded(child:PreparedGridView()
               ),
-            Container(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: const Padding(
+              Padding(
                 padding: EdgeInsets.only(left:8,right:8),
                 child: LargeHomeTile(),
-              ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top:8,bottom:22),
               child: Text("Dernière mise à jour il y a 5 minutes"),
             )],
@@ -62,8 +55,47 @@ class HomeView extends StatelessWidget {
             height: 100,
             decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
-                color:Colors.green
+                color: Color(0xFF214A1F),
           ),)
         ]));
+  }
+}
+
+
+class PreparedListView extends StatelessWidget {
+  const PreparedListView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var list = ["","","",""];
+    return ListView.builder(
+      // Let the ListView know how many items it needs to build.
+      itemCount: list.length,
+      // Provide a builder function. This is where the magic happens.
+      // Convert each item into a widget based on the type of item it is.
+      itemBuilder: (context, index) {
+        final item = list[index];
+        return const LargeHomeTile();
+      },
+    ).build(context);
+
+  }
+}
+
+class PreparedGridView extends StatelessWidget {
+  const PreparedGridView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: MediaQuery.of(context).size.width~/180,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      padding: const EdgeInsets.only(left:10,right:10),
+      children: const [HomeTile(),HomeTile(),HomeTile()],);
   }
 }
