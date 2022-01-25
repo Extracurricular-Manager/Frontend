@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:frontendmobile/routes.dart';
-//import 'package:frontendmobile/views/pageeleve.dart';
+import 'package:frontendmobile/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,15 +14,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             appBarTheme: const AppBarTheme(
-          color: Color(0xFF045824),
+          color: Color(0xFF214A1F),
         )),
-        //initialRoute: '/',
-        //onGenerateRoute: RouteGenerator.routes,
-
-        /* const PageEleve(
-        title: '',
-      ), */
-
-        home: const Text("Home"));
+        initialRoute: '/',
+        onGenerateRoute: RouteGenerator.routes);
   }
 }

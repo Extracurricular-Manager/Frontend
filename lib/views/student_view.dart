@@ -18,9 +18,10 @@ import 'package:flutter/material.dart';
 }*/
 
 //class PageEleve extends StatefulWidget {
-class PageEleve extends StatelessWidget {
-  const PageEleve({required String title});
-  @override
+class StudentView extends StatelessWidget {
+  const StudentView({Key? key}) : super(key: key);
+
+  //@override
   // PageEleveState createState() => _FavoriteWidgetState();
 
   @override
@@ -37,7 +38,7 @@ class PageEleve extends StatelessWidget {
               Icons.arrow_back,
             ),
             onPressed: () {
-              // To do
+              Navigator.pushNamed(context, '/student_view');
             },
           ),
           backgroundColor: const Color(0xFF214A1F),
