@@ -38,7 +38,7 @@ class StudentView extends StatelessWidget {
               Icons.arrow_back,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/student_view');
+              Navigator.pushNamed(context, '/home_view');
             },
           ),
           backgroundColor: const Color(0xFF214A1F),
@@ -60,23 +60,6 @@ class StudentView extends StatelessWidget {
               ],
             ),
           ),
-/*         bottom: PreferredSize(
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 0.5),
-                decoration: BoxDecoration(
-                    color: const Color(0xFF045824),
-                    border: Border.all(color: Colors.white)),
-                child: const TextField(
-                  decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      hintText: 'Hint Text',
-                      border: OutlineInputBorder(),
-                      hoverColor: Colors.white,
-                      focusColor: Colors.white,
-                      prefixIcon: Icon(Icons.search)),
-                )),
-            preferredSize: Size.fromHeight(4.0)), */
         ),
         body: ListView(
           children: [
@@ -93,17 +76,7 @@ class StudentView extends StatelessWidget {
                         filled: true,
                         hintText: 'Rechercher',
                         prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none
-
-                        //borderRadius: BorderRadius.all(Radius.circular(2.0)),
-
-                        //  focusedBorder: UnderlineInputBorder(
-                        // borderSide:
-                        //     BorderSide(color: Colors.white, width: 0.0),
-                        //borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                        // gapPadding: 2.0,
-                        // )
-                        ))),
+                        border: InputBorder.none))),
             ListView.builder(
                 // itemCount: 10,
                 itemCount: 20,

@@ -10,20 +10,24 @@ class LargeHomeTile extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: 500),
       child: Card(
         child: InkWell(
-          onTap:(){},
+          onTap: () {
+            Navigator.pushNamed(context, '/student_view');
+          },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                Icon(Icons.accessibility, size: 30,),
+                Icon(
+                  Icons.accessibility,
+                  size: 30,
+                ),
                 Text("Titre",
-                    style:TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 Spacer(),
-                Text("sous-titre", style:TextStyle(color: Colors.grey))
+                Text("sous-titre", style: TextStyle(color: Colors.grey))
               ],
             ),
           ),

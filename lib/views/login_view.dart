@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -6,7 +7,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       body: Container(
         padding: const EdgeInsets.fromLTRB(40, 100, 40, 100),
         color: const Color(0xFF214A1F),
@@ -16,7 +17,7 @@ class LoginPage extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), // radius of 10
                   color: Colors.white // green as background color
-              ),
+                  ),
               child: Form(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -25,7 +26,9 @@ class LoginPage extends StatelessWidget {
                     children: <Widget>[
                       const Text("Connexion",
                           style: TextStyle(
-                              height: 2, fontSize: 40, color: Color(0xFF214A1F))),
+                              height: 2,
+                              fontSize: 40,
+                              color: Color(0xFF214A1F))),
                       const Text("\n"),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -46,12 +49,15 @@ class LoginPage extends StatelessWidget {
                       const Text(""),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10), // radius of 10
+                          borderRadius:
+                              BorderRadius.circular(10), // radius of 10
                           color: const Color(0xFF214A1F),
                         ),
-                        child: const TextButton(
-                          onPressed: null,
-                          child: Text('Connexion',
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/home_view');
+                          },
+                          child: const Text('Connexion',
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
