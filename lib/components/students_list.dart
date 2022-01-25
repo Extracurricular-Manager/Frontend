@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class StudentsList extends StatelessWidget {
+class StudentsList extends StatefulWidget {
   final String title;
   final List<String> students;
 
@@ -9,26 +9,69 @@ class StudentsList extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool value = false;
+  State<StudentsList> createState() => _StudentsListState();
+}
 
+class _StudentsListState extends State<StudentsList>{
+
+  bool _isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          tooltip: 'Leading Icon',
-          icon: const Icon(
-            Icons.arrow_back_ios,
+        appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(
+              tooltip: 'Leading Icon',
+              icon: const Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () {
+                // To do
+              },
+            ),
+            backgroundColor: const Color(0xFF214A1F),
+            title: Text(widget.title),
+            shadowColor: Colors.transparent,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: InkWell(
+                    onTap: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.person_add,
+                          color: Colors.white,
+                        ),
+                        tooltip: 'Add new user',
+                        onPressed: null,
+                      ),
+                    )),
+              )
+            ]),
+        body: Stack(children: [
+          ListView.builder(
+            itemCount: widget.students.length,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                title: Text(
+                  widget.students[index],
+                  style: const TextStyle(color: Colors.black),
+                ),
+                value: _isChecked,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isChecked = value!;
+                  });
+                },
+              );
+            },
           ),
-          onPressed: () {
-            // To do
-          },
-        ),
-        backgroundColor: const Color(0xFF214A1F),
-        title: Column(
-          children: [
-            Text(title),
-            /*Container(
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0, left: 10.0),
+            child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), // radius of 10
                   color: Colors.white,
@@ -41,33 +84,14 @@ class StudentsList extends StatelessWidget {
                       ),
                       hintText: 'Search...',
                       border: InputBorder.none),
-                )),*/
-          ],
-        ),
-        actions: const <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.person_add,
-              color: Colors.white,
-            ),
-            tooltip: 'Add new user',
-            onPressed: null,
+                )),
           ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: students.length,
-        itemBuilder: (context, index) {
-          return CheckboxListTile(
-              title: Text(
-                students[index],
-                style: const TextStyle(color: Colors.black),
-              ),
-              value: value,
-              onChanged:  null
-          );
-        },
-      ),
-    );
+          Ink(
+            width: MediaQuery.of(context).size.width,
+            height: 60,
+            decoration: const BoxDecoration(
+                shape: BoxShape.rectangle, color: Color(0xFF214A1F)),
+          ),
+        ]));
   }
 }
