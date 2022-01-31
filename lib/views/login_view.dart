@@ -47,7 +47,18 @@ class LoginPage extends StatelessWidget {
                         //controller: ,
                       ),
                       const Text(""),
-                      Container(
+                      OutlinedButton(
+                        child: const Text('Connexion',
+                            style: TextStyle(color: Colors.white)),
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: const Color(0xFF214A1F),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/home_view');
+                        },
+                      ),
+                      /*Container(
                         decoration: BoxDecoration(
                           borderRadius:
                               BorderRadius.circular(10), // radius of 10
@@ -60,7 +71,7 @@ class LoginPage extends StatelessWidget {
                           child: const Text('Connexion',
                               style: TextStyle(color: Colors.white)),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
