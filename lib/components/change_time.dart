@@ -19,26 +19,44 @@ class HomePage extends State<horairePage> {
   TimeOfDay? pickedNight = null;
 
   Future<Null> selectTime(BuildContext context,bool matin) async {
-    picked = await showTimePicker(
-        context: context,
-        helpText: "Selectionnez votre heure:",
-        errorInvalidText: "Entrer une heure valide",
-        cancelText: "Annuler",
-        hourLabelText: "Heures",
-        minuteLabelText: "Minutes",
-        builder: (BuildContext context, Widget? child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-            child: child!,
-          );
-        },
-        initialTime: time);
-    if (picked != null && matin) {
-      setState(() {
-        time = picked!;
-      });
+    if(matin){
+      print("Heure du matin");
+      picked = await showTimePicker(
+          context: context,
+          helpText: "Selectionnez votre heure:",
+          errorInvalidText: "Entrer une heure valide",
+          cancelText: "Annuler",
+          hourLabelText: "Heures",
+          minuteLabelText: "Minutes",
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+              child: child!,
+            );
+          },
+          initialTime: time);
+      if (picked != null && matin) {
+        setState(() {
+          time = picked!;
+        });
+      }
     }
     else{
+      print("Heure du soir");
+      pickedNight = await showTimePicker(
+          context: context,
+          helpText: "Selectionnez votre heure:",
+          errorInvalidText: "Entrer une heure valide",
+          cancelText: "Annuler",
+          hourLabelText: "Heures",
+          minuteLabelText: "Minutes",
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+              child: child!,
+            );
+          },
+          initialTime: timeNight);
       setState(() {
         timeNight = pickedNight!;
       });
@@ -60,7 +78,7 @@ class HomePage extends State<horairePage> {
                       style: TextStyle( color: Colors.black, fontSize: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width / 22 : MediaQuery.of(context).size.height/22)), //
                   SizedBox(height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width / 30 : MediaQuery.of(context).size.height / 30),
                   garderie("Garderie (Matin)", morningChildcare, changeMorningChildcare, true),
-                  garderie("Garderie (Soir)", nightChildcare, changeNightChildcare, false),
+                  garderie("Garderie (Soir)", nightChildcare, changeNightChildcare, false ),
                   garderie("Cantine", true, true,true),
                 ],
               ),
@@ -125,10 +143,48 @@ class HomePage extends State<horairePage> {
                     width: taille(2.91),
                     height: taille(7.5),
                     alignment: Alignment.center,
-                    child: Text(
-                        Childcare
-                            ? "Arrivé: " + time.hour.toString() + "H" + time.minute.toString(): "",
-                        style: TextStyle(color: Colors.black, fontSize: taille(25))),
+                    child: Builder(
+                      builder: (context) {
+                        if(matin){
+                          return Builder(
+                            builder: (context) {
+                              if(time.minute < 10){
+                                return Text(
+                                    Childcare
+                                        ? "Arrivé: " + time.hour.toString() + "H" + "0" + time.minute.toString(): "",
+                                    style: TextStyle(color: Colors.black, fontSize: taille(25)));
+                              }
+                              else{
+                                return Text(
+                                    Childcare
+                                        ? "Arrivé: " + time.hour.toString() + "H" + time.minute.toString(): "",
+                                    style: TextStyle(color: Colors.black, fontSize: taille(25)));
+                              }
+                            }
+                          );
+                        }
+                        else{
+                          return Builder(
+                            builder: (context) {
+                              if(timeNight.minute < 10){
+                                return Text(
+                                    Childcare
+                                        ? "Arrivé: " + timeNight.hour.toString() + "H" + "0" +timeNight.minute.toString(): "",
+                                    style: TextStyle(color: Colors.black, fontSize: taille(25)));
+                              }
+                              else{
+                                return Text(
+                                    Childcare
+                                        ? "Arrivé: " + timeNight.hour.toString() + "H" + timeNight.minute.toString(): "",
+                                    style: TextStyle(color: Colors.black, fontSize: taille(25)));
+                              }
+
+                            }
+                          );
+                        }
+
+                      }
+                    ),
                   ),
                   Container(
                     height: taille(7.5),
@@ -170,10 +226,11 @@ class HomePage extends State<horairePage> {
                                     Childcare = !Childcare;
                                     if(matin){
                                       morningChildcare = !morningChildcare;
+                                      time = TimeOfDay.now();
                                     }else{
                                       nightChildcare = !nightChildcare;
+                                      timeNight = TimeOfDay.now();
                                     }
-                                    time = TimeOfDay.now();
                                   });
                                 },
                               ),
