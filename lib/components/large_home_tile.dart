@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class LargeHomeTile extends StatelessWidget {
-  const LargeHomeTile({Key? key}) : super(key: key);
+  const LargeHomeTile({Key? key, required this.onTapPath}) : super(key: key);
+
+  final String onTapPath;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class LargeHomeTile extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/student_view');
+            Navigator.pushNamed(context, onTapPath);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

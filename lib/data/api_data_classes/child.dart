@@ -91,12 +91,12 @@ class Adelphie {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['postalAdress'] = this.postalAdress;
-    data['referingParentName'] = this.referingParentName;
-    data['referingParentSurname'] = this.referingParentSurname;
-    data['telephoneNumber'] = this.telephoneNumber;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['postalAdress'] = postalAdress;
+    data['referingParentName'] = referingParentName;
+    data['referingParentSurname'] = referingParentSurname;
+    data['telephoneNumber'] = telephoneNumber;
     return data;
   }
 }

@@ -37,7 +37,7 @@ class HomeView extends StatelessWidget {
               Expanded(child: PreparedGridView()),
               Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
-                child: LargeHomeTile(),
+                child: LargeHomeTile(onTapPath: '/student_view'),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 22),
@@ -72,7 +72,7 @@ class PreparedListView extends StatelessWidget {
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
         final item = list[index];
-        return const LargeHomeTile();
+        return const LargeHomeTile(onTapPath: '/canteen_view',);
       },
     ).build(context);
   }
