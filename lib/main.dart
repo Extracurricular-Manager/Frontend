@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/routes.dart';
+import 'package:frontendmobile/test/test_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,5 +19,7 @@ class MyApp extends StatelessWidget {
         )),
         initialRoute: '/',
         onGenerateRoute: RouteGenerator.routes);
+
+//        home: TestView());
   }
 }
