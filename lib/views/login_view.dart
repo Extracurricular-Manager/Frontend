@@ -9,6 +9,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
+        //alignment: ,
         padding: const EdgeInsets.fromLTRB(40, 100, 40, 100),
         color: const Color(0xFF214A1F),
         child: ListView(

@@ -12,6 +12,22 @@ class CanteenView extends StatelessWidget {
       "Arthur",
       "Curtis",
       "Guillaume",
+      "Erreur d'affichage",
+      "Arthur",
+      "Curtis",
+      "Guillaume",
+      "Erreur d'affichage",
+      "Arthur",
+      "Curtis",
+      "Guillaume",
+      "Erreur d'affichage",
+      "Arthur",
+      "Curtis",
+      "Guillaume",
+      "Erreur d'affichage",
+      "Arthur",
+      "Curtis",
+      "Guillaume",
       "Sara"
     ];
     // ignore: prefer_const_constructors
