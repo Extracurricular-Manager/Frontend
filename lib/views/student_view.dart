@@ -104,12 +104,12 @@ class StudentView extends StatelessWidget {
                               ],
                             ),
                             onTap: () => {
-                              showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return horairePage();
-                                  }
-                              )
+                              showDialog<dynamic>(
+                             context: context,
+                              builder:(BuildContext context){
+
+                              return horairePage();
+                              })
                             },
                             /* onTap: () => Navigator.pushNamed(context, '/eleve',
                             arguments: "ThéoGiraudet") */
