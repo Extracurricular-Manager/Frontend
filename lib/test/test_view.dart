@@ -21,14 +21,17 @@ class TestView extends StatefulWidget {
 
 class _TestState extends State<TestView> {
   //final mapChild = initiliazeMap2(students,mapChild);
-/* 
-  final List<String> students = [
+  @override
+  void initState() {
+    initiliazeMap(widget.students, mapChild);
+  }
+  /*   final List<String> students = [
     "Erreur d'affichage",
     "Arthur",
     "Curtis",
     "Guillaume",
     "Sara"
-  ]; */
+  ];  */
 
 /*   Map<String, bool> mapChild = {
     "Erreur d'affichage": false,
@@ -55,10 +58,19 @@ class _TestState extends State<TestView> {
     Uncheck = true;
   }
 
+  void initiliazeMap(List<String> childs, Map<String, bool> mapC) {
+    for (var child in childs) {
+      mapC[child] = false;
+    }
+  }
+
+/* getUl(){
+initiliazeMap3(students, mapChild);
+} */
+
   @override
   Widget build(BuildContext context) {
-    initiliazeMap(widget.students, mapChild);
-    print("Init " + mapChild.toString());
+    //   print("Init " + mapChild.toString());
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -130,11 +142,11 @@ class _TestState extends State<TestView> {
                       } else {
                         child.remove(widget.students[index]);
                       }
-                      //     print(Uncheck);
-/*                       if (Uncheck == true) {
+                      /*   print(Uncheck);
+                      if (Uncheck == true) {
                         //reset checkbox : not working ?
-                        print("im in");
-                        mapChild.updateAll((key, value) => false);
+                        // print("im in");
+                        // mapChild.updateAll((key, value) => false);
                         /* for (var element in mapChild.values) {
                           print("a");
                           element = false;
@@ -142,8 +154,8 @@ class _TestState extends State<TestView> {
                         Uncheck = false;
                       } */
 
-                      //print(child);
-                      //  print(mapChild);
+                      print(child);
+                      // print(mapChild);
                     });
                   },
                 ),
@@ -186,9 +198,4 @@ class _TestState extends State<TestView> {
     return a;
   } */
 
-  void initiliazeMap(List<String> childs, Map<String, bool> mapC) {
-    for (var child in childs) {
-      mapC[child] = false;
-    }
-  }
 }
