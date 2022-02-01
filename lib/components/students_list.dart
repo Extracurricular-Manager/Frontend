@@ -52,12 +52,12 @@ class _StudentsListState extends State<StudentsList> {
                   color: Colors.white,
                 ),
                 child: const TextField(
+                  //controller: searchController,
                   decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.search,
                         color: Colors.black54,
                       ),
-                      hintText: 'Search...',
                       border: InputBorder.none),
                 )),
           ),

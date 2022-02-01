@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: const Color(0xFF214A1F),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(40, 200, 40, 100),
+          padding: const EdgeInsets.fromLTRB(40, 220, 40, 100),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
