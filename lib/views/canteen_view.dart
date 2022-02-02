@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/students_list.dart';
-import 'package:frontendmobile/test/test_view.dart';
 
 class CanteenView extends StatelessWidget {
   const CanteenView({Key? key}) : super(key: key);
@@ -17,8 +16,8 @@ class CanteenView extends StatelessWidget {
       "Sara"
     ];
     // ignore: prefer_const_constructors
-    return TestView(
-      title: "Testing",
+    return StudentsList(
+      title: "Canteen",
       students: students,
     );
   }
