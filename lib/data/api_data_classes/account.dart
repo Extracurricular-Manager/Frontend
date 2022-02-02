@@ -1,4 +1,6 @@
-class Account {
+import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+
+class Account implements ApiDataClass {
   bool? activated;
   List<String>? authorities;
   String? createdBy;
@@ -28,6 +30,7 @@ class Account {
         this.lastName,
         this.login});
 
+  @override
   Account.fromJson(Map<String, dynamic> json) {
     activated = json['activated'];
     authorities = json['authorities'].cast<String>();
@@ -44,6 +47,7 @@ class Account {
     login = json['login'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['activated'] = activated;

@@ -1,4 +1,6 @@
-class Classroom {
+import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+
+class Classroom implements ApiDataClass{
   int? id;
   String? name;
   String? professor;
@@ -11,6 +13,7 @@ class Classroom {
     professor = json['professor'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

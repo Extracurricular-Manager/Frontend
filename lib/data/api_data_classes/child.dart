@@ -1,10 +1,12 @@
 
 
+import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+
 import 'classroom.dart';
 import 'diet.dart';
 import 'grade_level.dart';
 
-class ChildData {
+class ChildData implements ApiDataClass {
   Adelphie? adelphie;
   String? birthday;
   Classroom? classroom;
@@ -46,6 +48,7 @@ class ChildData {
     surname = json['surname'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (adelphie != null) {
