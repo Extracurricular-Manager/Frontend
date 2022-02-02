@@ -1,7 +1,6 @@
 import 'dart:collection';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontendmobile/components/search_bar.dart';
 
 class TestView extends StatefulWidget {
   final String title;
@@ -91,27 +90,8 @@ initiliazeMap3(students, mapChild);
                   )),
             )
           ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50.0),
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // radius of 10
-                    color: Colors.white,
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.black54,
-                        ),
-                        hintText: 'Search...',
-                        border: InputBorder.none),
-                  )),
-            ),
-          ),
+          bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(50.0), child: SearchBar()),
         ),
         body: ListView(children: [
           ListView.builder(

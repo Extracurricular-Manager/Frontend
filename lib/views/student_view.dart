@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/change_time.dart';
+import 'package:frontendmobile/components/search_bar.dart';
 //import 'package:provider/provider.dart';
 
 /*  class PageEleveState extends State<PageEleve> {
@@ -52,27 +53,8 @@ class StudentView extends StatelessWidget {
               ],
             ),
           ),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50.0),
-            child: Padding(
-              padding:
-              const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // radius of 10
-                    color: Colors.white,
-                  ),
-                  child: const TextField(
-                    //controller: searchController,
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.black54,
-                        ),
-                        border: InputBorder.none),
-                  )),
-            ),
-          ),
+          bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(50.0), child: SearchBar()),
         ),
         body: ListView(
           children: [
@@ -113,11 +95,10 @@ class StudentView extends StatelessWidget {
                             ),
                             onTap: () => {
                               showDialog<dynamic>(
-                             context: context,
-                              builder:(BuildContext context){
-
-                              return horairePage();
-                              })
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return horairePage();
+                                  })
                             },
                             /* onTap: () => Navigator.pushNamed(context, '/eleve',
                             arguments: "ThéoGiraudet") */
