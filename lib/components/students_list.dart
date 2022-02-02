@@ -45,7 +45,7 @@ class _StudentsListState extends State<StudentsList> {
           preferredSize: const Size.fromHeight(50.0),
           child: Padding(
             padding:
-                const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
+                const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
             child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10), // radius of 10

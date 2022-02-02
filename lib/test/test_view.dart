@@ -4,16 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TestView extends StatefulWidget {
-  final String title = "Test";
-  final List<String> students = [
-    "Erreur d'affichage",
-    "Arthur",
-    "Curtis",
-    "Guillaume",
-    "Sara"
-  ];
+  final String title;
+  final List<String> students;
 
-  TestView({Key? key}) : super(key: key);
+  const TestView({Key? key, required this.title, required this.students})
+      : super(key: key);
 
   @override
   State<TestView> createState() => _TestState();
@@ -25,6 +20,7 @@ class _TestState extends State<TestView> {
   void initState() {
     initiliazeMap(widget.students, mapChild);
   }
+
   /*   final List<String> students = [
     "Erreur d'affichage",
     "Arthur",
@@ -99,7 +95,7 @@ initiliazeMap3(students, mapChild);
             preferredSize: const Size.fromHeight(50.0),
             child: Padding(
               padding:
-                  const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
+                  const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
               child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), // radius of 10

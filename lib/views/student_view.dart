@@ -52,27 +52,35 @@ class StudentView extends StatelessWidget {
               ],
             ),
           ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(50.0),
+            child: Padding(
+              padding:
+              const EdgeInsets.only(right: 10.0, left: 10.0, bottom: 5.0),
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10), // radius of 10
+                    color: Colors.white,
+                  ),
+                  child: const TextField(
+                    //controller: searchController,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.black54,
+                        ),
+                        border: InputBorder.none),
+                  )),
+            ),
+          ),
         ),
         body: ListView(
           children: [
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 0.5),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF214A1F),
-                ),
-                child: const TextField(
-                    decoration: InputDecoration(
-                        hintTextDirection: TextDirection.ltr,
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Rechercher',
-                        prefixIcon: Icon(Icons.search),
-                        border: InputBorder.none))),
             ListView.builder(
                 // itemCount: 10,
                 itemCount: 20,
-                scrollDirection: Axis.vertical,
+                //scrollDirection: Axis.vertical,
+                physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return Center(
