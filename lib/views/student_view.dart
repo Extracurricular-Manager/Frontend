@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontendmobile/components/change_time.dart';
 import 'package:frontendmobile/components/search_bar.dart';
+import 'package:frontendmobile/components/students_list_view_builder.dart';
 //import 'package:provider/provider.dart';
 
 /*  class PageEleveState extends State<PageEleve> {
@@ -29,6 +29,25 @@ class StudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //List<String> myList = List.generate(3, (index) => "Theo");
+
+    List<String> students = [
+      "test",
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+      "test7",
+      "test8",
+      "test9",
+      "test10",
+      "test11",
+      "test12",
+      "test13",
+      "test14",
+      "test15"
+    ];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -56,62 +75,8 @@ class StudentView extends StatelessWidget {
           bottom: const PreferredSize(
               preferredSize: Size.fromHeight(50.0), child: SearchBar()),
         ),
-        body: ListView(
-          children: [
-            ListView.builder(
-                // itemCount: 10,
-                itemCount: 20,
-                //scrollDirection: Axis.vertical,
-                physics: const ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Card(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            // leading: const Icon(Icons.people),
-                            title: const Text("Théo Giraudet"),
-                            subtitle: Row(
-                              children: const <Widget>[
-                                Icon(Icons.check_circle_outline,
-                                    color: Color(0xFF045824)),
-                                Text(
-                                  'Présent   ',
-                                  style: TextStyle(
-                                    color: Color(0xFF047212),
-                                  ),
-                                ),
-                                Icon(Icons.radio_button_unchecked,
-                                    color: Colors.red), // Pas top
-                                Text(
-                                  'Cantine',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onTap: () => {
-                              showDialog<dynamic>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return horairePage();
-                                  })
-                            },
-                            /* onTap: () => Navigator.pushNamed(context, '/eleve',
-                            arguments: "ThéoGiraudet") */
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          ],
+        body: StudentsBuilder(
+          students: students,
         ));
   }
 }
