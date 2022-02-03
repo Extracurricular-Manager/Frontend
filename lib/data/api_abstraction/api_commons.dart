@@ -34,15 +34,8 @@ class ApiCommons {
     return StorageUtils().addToDefaultVault(generatedUrl, data as ApiDataClass);
   }
 
-  Future<T> postOperation<T>(
-      BasicApiEndpoint sourceClass, String endpoint) async {
-    final generatedUrl = baseUrl + sourceClass.baseUrl + endpoint;
-    final response = await http.post(Uri.parse(generatedUrl));
-    if (response.statusCode == HttpStatus.ok) {
-      return sourceClass.createFromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load ' + generatedUrl);
-    }
+  Future<http.Response> postOperation<T>(String url, ApiDataClass data) {
+    return http.post(Uri.parse(url), body:data);
   }
 
   Future<T> putOperation<T>(
