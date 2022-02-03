@@ -36,6 +36,7 @@ dependencies:
   dart_ping_ios: ^1.0.0
   dart_ping: ^6.1.1
   logger: ^1.1.0
+  workmanager: ^0.4.1
   flutter:
     sdk: flutter
 
