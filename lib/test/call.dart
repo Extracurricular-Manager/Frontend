@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontendmobile/data/child.dart';
+import 'package:frontendmobile/data/childEndpoint.dart';
 import 'package:http/http.dart' as http;
 
 //Queue<Child> childCalled = Queue();

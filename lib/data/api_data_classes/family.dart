@@ -1,4 +1,6 @@
-class Family {
+import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+
+class Family implements ApiDataClass {
   int? id;
   String? postalAdress;
   String? referingParentName;
@@ -20,6 +22,7 @@ class Family {
     telephoneNumber = json['telephoneNumber'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
