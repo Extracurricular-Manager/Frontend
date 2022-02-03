@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/search_bar.dart';
 import 'package:frontendmobile/components/students_list_view_builder.dart';
+import 'package:frontendmobile/components/students_list_view_builder.dart';
 //import 'package:provider/provider.dart';
 
 /*  class PageEleveState extends State<PageEleve> {
