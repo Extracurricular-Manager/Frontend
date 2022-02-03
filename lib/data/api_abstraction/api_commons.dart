@@ -33,7 +33,7 @@ class ApiCommons {
     }
   }
 
-  Future<void> SendToBack() async {
+  static Future<void> SendToBack() async {
     var vault = await StorageUtils().getDefaultVault();
     var cache = await StorageUtils().getDefaultCache();
     var keys = await vault.keys;
@@ -56,7 +56,7 @@ class ApiCommons {
     return StorageUtils().addToDefaultVault(generatedUrl, data as ApiDataClass);
   }
 
-  Future<http.Response> postOperation<T>(String url, ApiDataClass data) {
+  static Future<http.Response> postOperation<T>(String url, ApiDataClass data) {
     return http.post(Uri.parse(url), body: data);
   }
 

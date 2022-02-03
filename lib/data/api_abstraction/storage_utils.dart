@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stash/stash_api.dart';
 import 'package:stash_hive/stash_hive.dart';
+
+import '../../main.dart';
 
 class StorageUtils{
   static final StorageUtils _StorageUtils = StorageUtils._internal();
@@ -78,6 +81,7 @@ bool noteUpdateAndCheckIfNotRecent(String key){
   }
 
   void pushProcess(){
+    ApiCommons.SendToBack().then((value) => MyApp.log.d("Envoi terminé"));
   }
 
 }
