@@ -33,7 +33,8 @@ class ApiCommons {
     }
   }
 
-  static Future<void> SendToBack() async {
+  static Future<bool> SendToBack() async {
+    bool result = true;
     var vault = await StorageUtils().getDefaultVault();
     var cache = await StorageUtils().getDefaultCache();
     var keys = await vault.keys;
@@ -45,9 +46,13 @@ class ApiCommons {
         if (postStatut.statusCode == HttpStatus.ok) {
           await vault.remove(key);
           await cache.put(key, data);
+        } else {
+          //TODO : AJOUTER LA PRISE EN CHARGE DU CODE HTTP 210 (CHANGEMENT DE TOKEN)
+          result = false;
         }
       }
     }
+    return result;
   }
 
   Future<void> pushDataToQueue<T>(
