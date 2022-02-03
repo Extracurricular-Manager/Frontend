@@ -22,8 +22,12 @@ class ApiCommons {
   Future<T> getOperation<T>(BasicApiEndpoint apiClass, String endpoint) async {
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
     final response = await http.get(Uri.parse(generatedUrl));
+
     if (response.statusCode == HttpStatus.ok) {
-      return apiClass.createFromJson(jsonDecode(response.body));
+      var cache = await StorageUtils().getDefaultCache();
+      var result = apiClass.createFromJson(jsonDecode(response.body));
+      cache.put(generatedUrl, result);
+      return result;
     } else {
       throw Exception('Failed to load ' + generatedUrl);
     }
@@ -34,6 +38,7 @@ class ApiCommons {
     var cache = await StorageUtils().getDefaultCache();
     var keys = await vault.keys;
     if (await NetworkUtils.getConnectivity() == NetworkStatus.ok) {
+      //POST
       for (var key in keys) {
         var data = await vault.get(key);
         var postStatut = await postOperation(key, data);
