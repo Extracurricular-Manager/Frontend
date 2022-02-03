@@ -17,12 +17,12 @@ class StorageUtils{
   }
   StorageUtils._internal();
 
-  Future<HiveDefaultCacheStore> getCacheStore(){
+  Future<HiveDefaultCacheStore> _getCacheStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultCacheStore(path: value.absolute.path));
   }
 
   Future<Cache<ApiDataClass>> getCache(String? cacheName) async {
-    var store = await getCacheStore();
+    var store = await _getCacheStore();
     return store.cache<ApiDataClass>(
         name:cacheName ?? defaultCacheName,
         eventListenerMode: EventListenerMode.synchronous,
@@ -31,12 +31,12 @@ class StorageUtils{
                   (event) => print('Key "${event.entry.key}" added to the cache'));
   }
 
-  Future<HiveDefaultVaultStore> getVaultStore(){
+  Future<HiveDefaultVaultStore> _getVaultStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
   }
   
   Future<Vault> getVault(String? vaultName) async {
-    var store = await getVaultStore();
+    var store = await _getVaultStore();
     return
       store.vault(
         name:vaultName ?? defaultVaultName,
@@ -50,6 +50,7 @@ class StorageUtils{
     var vault = await getVault(defaultVaultName);
     return vault.put(path,data);
   }
+
   Future<void> addToDefaultCache(String path, ApiDataClass data) async {
     var vault = await getVault(defaultVaultName);
     return vault.put(path,data);

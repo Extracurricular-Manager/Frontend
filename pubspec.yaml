@@ -31,6 +31,10 @@ dependencies:
   stash: ^4.0.1
   stash_hive: ^4.0.1
   path_provider: ^2.0.8
+  connectivity_plus: ^2.2.0
+  single_item_shared_prefs: ^0.0.3+1
+  dart_ping_ios: ^1.0.0
+  dart_ping: ^6.1.1
   flutter:
     sdk: flutter
 
