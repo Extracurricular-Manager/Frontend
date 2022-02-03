@@ -45,8 +45,6 @@ bool noteUpdateAndCheckIfNotRecent(String key){
   return getCache(defaultCacheName);
   }
 
-
-
   Future<HiveDefaultVaultStore> _getVaultStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
   }
