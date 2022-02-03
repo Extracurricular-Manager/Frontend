@@ -6,6 +6,11 @@ import 'package:http/http.dart' as http;
 
 class NetworkUtils{
 
+  static Future<bool> alreadyExists(String url) async{
+    final response = await http.get(Uri.parse(url));
+    return response.statusCode == HttpStatus.ok;
+  }
+
   static Future<NetworkStatus> getConnectivity(){
     return SharedPrefsStorage.primitive(itemKey: "serverIP").get().then((iPKey) =>
       Connectivity().checkConnectivity().then((value) => value != ConnectivityResult.none ? _ping(iPKey as String) : _noNetworkStatus()
