@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:frontendmobile/data/api_abstraction/api_basic_endpoint.dart';
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,8 +19,7 @@ class ApiCommons {
   String baseUrl = "/api";
 
   /// basic get operation (options currently passed through the endpoint parameter)
-  Future<T> getOperation<T>(
-      BasicApiEndpoint apiClass, String endpoint) async {
+  Future<T> getOperation<T>(BasicApiEndpoint apiClass, String endpoint) async {
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
     final response = await http.get(Uri.parse(generatedUrl));
     if (response.statusCode == HttpStatus.ok) {
@@ -29,13 +29,30 @@ class ApiCommons {
     }
   }
 
-  Future<void> pushDataToQueue<T>(BasicApiEndpoint apiClass, String endpoint, dynamic data){
+  Future<void> SendToBack() async {
+    var vault = await StorageUtils().getDefaultVault();
+    var cache = await StorageUtils().getDefaultCache();
+    var keys = await vault.keys;
+    if (await NetworkUtils.getConnectivity() == NetworkStatus.ok) {
+      for (var key in keys) {
+        var data = await vault.get(key);
+        var postStatut = await postOperation(key, data);
+        if (postStatut.statusCode == HttpStatus.ok) {
+          await vault.remove(key);
+          await cache.put(key, data);
+        }
+      }
+    }
+  }
+
+  Future<void> pushDataToQueue<T>(
+      BasicApiEndpoint apiClass, String endpoint, dynamic data) {
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
     return StorageUtils().addToDefaultVault(generatedUrl, data as ApiDataClass);
   }
 
   Future<http.Response> postOperation<T>(String url, ApiDataClass data) {
-    return http.post(Uri.parse(url), body:data);
+    return http.post(Uri.parse(url), body: data);
   }
 
   Future<T> putOperation<T>(
