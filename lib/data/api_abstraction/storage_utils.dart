@@ -8,7 +8,8 @@ import 'package:stash_hive/stash_hive.dart';
 
 class StorageUtils{
   static final StorageUtils _cache = StorageUtils._internal();
-  static late var store;
+  String defaultCacheName = "GetCache";
+  String defaultVaultName = "PostWaitingVault";
 
   factory StorageUtils() {
 
@@ -23,7 +24,7 @@ class StorageUtils{
   Future<Cache<ApiDataClass>> getCache(String? cacheName) async {
     var store = await getCacheStore();
     return store.cache<ApiDataClass>(
-        name:cacheName ?? "GetCache",
+        name:cacheName ?? defaultCacheName,
         eventListenerMode: EventListenerMode.synchronous,
         expiryPolicy: const ModifiedExpiryPolicy(Duration(days: 7)) )
           ..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
@@ -38,10 +39,19 @@ class StorageUtils{
     var store = await getVaultStore();
     return
       store.vault(
-        name:vaultName ?? "PostWaitingVault",
+        name:vaultName ?? defaultVaultName,
         eventListenerMode: EventListenerMode.synchronous
       )
       ..on<VaultEntryCreatedEvent>().listen(
               (event) => print('Key "${event.entry.key}" added to the vault'));
+  }
+
+  Future<void> addToDefaultVault(String path, ApiDataClass data) async {
+    var vault = await getVault(defaultVaultName);
+    return vault.put(path,data);
+  }
+  Future<void> addToDefaultCache(String path, ApiDataClass data) async {
+    var vault = await getVault(defaultVaultName);
+    return vault.put(path,data);
   }
 }
