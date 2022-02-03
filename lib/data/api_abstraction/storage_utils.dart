@@ -65,7 +65,7 @@ bool noteUpdateAndCheckIfNotRecent(String key){
     });
   }
 
-  Future<Cache<ApiDataClass>> getDefaultVault (){
+  Future<Vault<dynamic>> getDefaultVault (){
     return getVault(defaultVaultName);
   }
 
