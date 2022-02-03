@@ -40,16 +40,18 @@ class HomePage extends State<horairePage> {
           return
             AlertDialog(
               title: const Text('Élève XXX'),
-              content: SizedBox(
-                width: 500,
+              titlePadding: EdgeInsets.fromLTRB(10,10,10,0),
+              content: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ListView.builder(
-                  shrinkWrap: true,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return serviceItem("Gardener(Soir)",true,index.toString());
-                      },
-                    ).build(context),
+                    shrinkWrap: true,
+                        itemCount: 3,
+                        itemBuilder: (context, index) {
+                          return serviceItem("Gardener(Soir)",true,index.toString());
+                        },
+                      ).build(context),
               ),
+              contentPadding: EdgeInsets.fromLTRB(10,10,10,10),
             );
         });
   }
@@ -57,7 +59,7 @@ class HomePage extends State<horairePage> {
   StatefulBuilder serviceItem(String serviceName,bool settableTime, String id){
     return StatefulBuilder(
       builder:(BuildContext context, StateSetter setState) {
-        return CheckboxListTile(title:titleAndTimeSelector(Text(serviceName), settableTime, id),value: someMap[id] ?? false,activeColor: Color(0xFF214A1F), onChanged: (bool? value) {
+        return CheckboxListTile(title:titleAndTimeSelector(Text(serviceName), settableTime, id),value: someMap[id] ?? false,contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0) ,activeColor: Color(0xFF214A1F), onChanged: (bool? value) {
           setState(() {
             if (value!){
               timeDumb.setItem(id, TimeOfDay.now());
@@ -96,18 +98,25 @@ class timePickerButton{
 
   StatefulBuilder clockButton(){
     return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      return MaterialButton(color:Color(0xFF214A1F), child: Row(children:[const Icon(Icons.edit,color:Colors.white,size: 18.0,),
-      timeCalculator(stored)]), onPressed: () {
-        timeSelector(context, stored).then((value) => {
-          if (value != null){
-            setState((){
-              onUpdate(value);
-              stored = value;})
-          }}
-        );
-      }
+      print(MediaQuery.of(context).size.width*0.18);
+      print(MediaQuery.of(context).size.width > 70);
+          return Container(
+            width: MediaQuery.of(context).size.width*0.18 > 60 ? MediaQuery.of(context).size.width*0.18 : MediaQuery.of(context).size.width*0.1,
+            child: MaterialButton(color:Color(0xFF214A1F), padding: MediaQuery.of(context).size.width*0.18 > 60 ? EdgeInsets.fromLTRB(0, 0, 0, 0) : EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.025, 0, MediaQuery.of(context).size.width*0.025, 0),
+                    child: Row(children:[Icon(Icons.edit,color:Colors.white, size: 14), MediaQuery.of(context).size.width*0.18 > 60 ? timeCalculator(stored) : SizedBox(width: 0)]), onPressed: () {
+                  timeSelector(context, stored).then((value) => {
+                    if (value != null){
+                      setState((){
+                        onUpdate(value);
+                        stored = value;})
+                    }}
+                  );
+                }
+                )
+
+          );
+        }
       );
-    });
   }
   Future<TimeOfDay?> timeSelector(BuildContext context, TimeOfDay? initialTime)  {
     var initTime = initialTime ?? TimeOfDay.now();

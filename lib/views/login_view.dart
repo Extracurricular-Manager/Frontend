@@ -9,6 +9,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFF214A1F),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width*0.1 : MediaQuery.of(context).size.width*0.1,
@@ -41,25 +42,23 @@ class LoginPage extends StatelessWidget {
                                       child: const Text("Connexion",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20,
                                               color: Color(0xFF214A1F))),
                                     ),
                                     SizedBox(height: constraints.biggest.height*0.05),
                                     Container(
-                                      height: constraints.biggest.height*0.25,
+                                      height: constraints.biggest.height*0.24,
                                       width: constraints.biggest.width,
                                       child: TextFormField(
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                           labelText: "Nom d’utilisateur",
                                         ),
-
                                         //controller: ,
                                       ),
                                     ),
-                                    SizedBox(height: constraints.biggest.height*0.03),
+                                    SizedBox(height: constraints.biggest.height*0.06),
                                     Container(
-                                      height: constraints.biggest.height*0.25,
+                                      height: constraints.biggest.height*0.24,
                                       width: constraints.biggest.width,
                                       child: TextFormField(
                                         decoration: const InputDecoration(
@@ -70,13 +69,13 @@ class LoginPage extends StatelessWidget {
                                         //controller: ,
                                       ),
                                     ),
-                                    SizedBox(height: constraints.biggest.height*0.05),
+                                    SizedBox(height: constraints.biggest.height*0.06),
                                     Container(
                                       height: constraints.biggest.height*0.20,
                                       width: constraints.biggest.width,
                                       child: OutlinedButton(
                                         child: Text('Connexion',
-                                            style: TextStyle(color: Colors.white,fontSize: 10)),
+                                            style: TextStyle(color: Colors.white)),
                                         style: OutlinedButton.styleFrom(
                                           primary: Colors.white,
                                           backgroundColor: const Color(0xFF214A1F),

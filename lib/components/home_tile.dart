@@ -8,29 +8,31 @@ class HomeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var elev = 5.0;
     return Card(
-      child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, "/canteen_view");
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Icon(
-                Icons.accessibility,
-                size: 30,
-              ),
-              Text("Titre",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Spacer(),
-              Text("sous-titre", style: TextStyle(color: Colors.grey))
-            ],
+      elevation: elev,
+      child: Container(
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, "/canteen_view");
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Icon(
+                  Icons.accessibility,
+                  size: 30,
+                ),
+                Text("Titre",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Spacer(),
+                Text("sous-titre", style: TextStyle(color: Colors.grey))
+              ],
+            ),
           ),
         ),
       ),
-      elevation: elev,
     );
   }
 }
