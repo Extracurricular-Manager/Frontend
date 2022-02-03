@@ -1,21 +1,31 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stash/stash_api.dart';
 import 'package:stash_hive/stash_hive.dart';
 
 class StorageUtils{
-  static final StorageUtils _cache = StorageUtils._internal();
+  static final StorageUtils _StorageUtils = StorageUtils._internal();
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
-
+  static Map<String, DateTime> lastUpdate = {};
   factory StorageUtils() {
-
-    return _cache;
+    return _StorageUtils;
   }
   StorageUtils._internal();
+
+bool noteUpdateAndCheckIfNotRecent(String key){
+  int timetime = 10;
+  DateTime precedentUpdateTime = lastUpdate[key] ?? DateTime.now();
+  lastUpdate[key] = DateTime.now();
+  var result = DateTime.now().subtract(Duration(seconds: timetime)).isAfter(precedentUpdateTime);
+  //Logger().d("Dernier item ajouté il y a plus de $timetime secondes :" + (result ? "Oui":"Non"));
+  return DateTime.now().subtract(const Duration(seconds: 10)).isAfter(precedentUpdateTime);
+}
 
   Future<HiveDefaultCacheStore> _getCacheStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultCacheStore(path: value.absolute.path));
@@ -34,7 +44,7 @@ class StorageUtils{
   Future<HiveDefaultVaultStore> _getVaultStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
   }
-  
+
   Future<Vault> getVault(String? vaultName) async {
     var store = await _getVaultStore();
     return
@@ -43,7 +53,10 @@ class StorageUtils{
         eventListenerMode: EventListenerMode.synchronous
       )
       ..on<VaultEntryCreatedEvent>().listen(
-              (event) => print('Key "${event.entry.key}" added to the vault'));
+              (event) => print('Key "${event.entry.key}" added to the vault'))
+    ..on<VaultEntryCreatedEvent>().listen((event) {
+      if(noteUpdateAndCheckIfNotRecent(defaultVaultName)){pushProcess();}
+    });
   }
 
   Future<void> addToDefaultVault(String path, ApiDataClass data) async {
@@ -55,4 +68,8 @@ class StorageUtils{
     var vault = await getVault(defaultVaultName);
     return vault.put(path,data);
   }
+
+  void pushProcess(){
+  }
+
 }

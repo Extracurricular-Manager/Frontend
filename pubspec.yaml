@@ -35,6 +35,7 @@ dependencies:
   single_item_shared_prefs: ^0.0.3+1
   dart_ping_ios: ^1.0.0
   dart_ping: ^6.1.1
+  logger: ^1.1.0
   flutter:
     sdk: flutter
 
