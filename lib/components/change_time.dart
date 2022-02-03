@@ -40,18 +40,16 @@ class HomePage extends State<horairePage> {
           return
             AlertDialog(
               title: const Text('Élève XXX'),
-              titlePadding: EdgeInsets.fromLTRB(10,10,10,0),
-              content: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: ListView.builder(
+              content: SizedBox(
+                width: 500,
+                  child: ListView.builder(
                     shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          return serviceItem("Gardener(Soir)",true,index.toString());
-                        },
-                      ).build(context),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return serviceItem("Gardener(Soir)",true,index.toString());
+                    },
+                  ).build(context),
               ),
-              contentPadding: EdgeInsets.fromLTRB(10,10,10,10),
             );
         });
   }
@@ -98,8 +96,6 @@ class timePickerButton{
 
   StatefulBuilder clockButton(){
     return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      print(MediaQuery.of(context).size.width*0.18);
-      print(MediaQuery.of(context).size.width > 70);
           return Container(
             width: MediaQuery.of(context).size.width*0.18 > 60 ? MediaQuery.of(context).size.width*0.18 : MediaQuery.of(context).size.width*0.1,
             child: MaterialButton(color:Color(0xFF214A1F), padding: MediaQuery.of(context).size.width*0.18 > 60 ? EdgeInsets.fromLTRB(0, 0, 0, 0) : EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.025, 0, MediaQuery.of(context).size.width*0.025, 0),
