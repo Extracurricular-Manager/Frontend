@@ -12,15 +12,17 @@ class LoginPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFF214A1F),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width*0.1 : MediaQuery.of(context).size.width*0.1,
-                                        vertical: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height*0.3 : MediaQuery.of(context).size.height*0.15),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.25),
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height*0.4 : MediaQuery.of(context).size.height*0.7,
+                    constraints: BoxConstraints(maxWidth: 400, maxHeight: 300),
+                    height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height*0.4 : MediaQuery.of(context).size.height*0.5,
                     width: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width*0.9 : MediaQuery.of(context).size.width*0.9,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10), // radius of 10
@@ -30,7 +32,7 @@ class LoginPage extends StatelessWidget {
                       child: LayoutBuilder(
                           builder: (BuildContext context, BoxConstraints constraints) {
                           return Container(
-                            padding: EdgeInsets.symmetric(horizontal: constraints.biggest.width * 0.1, vertical: constraints.biggest.height * 0.08),
+                            padding: EdgeInsets.symmetric(horizontal: constraints.biggest.width * 0.1, vertical: constraints.biggest.height * 0.065),
                             child: LayoutBuilder(
                               builder: (BuildContext context, BoxConstraints constraints) {
                                 return Column(
@@ -39,8 +41,9 @@ class LoginPage extends StatelessWidget {
                                     Container(
                                       height: constraints.biggest.height*0.15,
                                       width: constraints.biggest.width,
-                                      child: const Text("Connexion",
+                                      child: Text("Connexion",
                                           style: TextStyle(
+                                            fontSize: 17 * MediaQuery.of(context).textScaleFactor,
                                               fontWeight: FontWeight.bold,
                                               color: Color(0xFF214A1F))),
                                     ),
