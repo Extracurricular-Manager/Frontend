@@ -60,6 +60,26 @@ class ApiCommons {
     pushDataToQueue(apiClass, endpoint, data);
   }
 
+  Future<ApiDataClass?> fetch<T>(
+      BasicApiEndpoint apiClass, String endpoint) async {
+    var fastCache = await StorageUtils().getFastCache();
+    var cache = await StorageUtils().getDefaultCache();
+    final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
+    var fastResult = await fastCache.get(generatedUrl);
+    if (fastResult == null) {
+      switch (await NetworkUtils.getConnectivity()) {
+        case NetworkStatus.ok:
+          var result = await getOperation(apiClass, endpoint);
+          StorageUtils().addToCaches(generatedUrl, result);
+          return result;
+        default:
+          return cache.get(generatedUrl);
+      }
+    } else {
+      return fastResult;
+    }
+  }
+
   Future<void> pushDataToQueue<T>(
       BasicApiEndpoint apiClass, String endpoint, dynamic data) {
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
