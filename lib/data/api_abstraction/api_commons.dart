@@ -5,6 +5,7 @@ import 'package:frontendmobile/data/api_abstraction/api_basic_endpoint.dart';
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
+import 'package:frontendmobile/main.dart';
 import 'package:http/http.dart' as http;
 
 class ApiCommons {
@@ -32,12 +33,13 @@ class ApiCommons {
   }
 
   static Future<bool> SendToBack() async {
+    MyApp.log.i("Lancement du process d'envoi au back");
     bool result = true;
     var vault = await StorageUtils().getDefaultVault();
     var cache = await StorageUtils().getDefaultCache();
     var keys = await vault.keys;
     if (await NetworkUtils.getConnectivity() == NetworkStatus.ok) {
-      //POST
+      MyApp.log.d("Connexion possible. Début du process d'envoi");
       for (var key in keys) {
         var data = await vault.get(key);
         var postStatut = await postOperation(key, data);
@@ -49,6 +51,8 @@ class ApiCommons {
           result = false;
         }
       }
+    } else {
+      MyApp.log.w("Pas de connexion au serveur.");
     }
     return result;
   }
