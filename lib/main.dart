@@ -33,8 +33,9 @@ class MyApp extends StatelessWidget {
   static var log = Logger();
   @override
   Widget build(BuildContext context) {
-    SharedPrefsStorage<String>.primitive(itemKey: "serverIP").save("http://mairie.toolsr.saint-ganton.fr");
-    ApiCommons.SendToBack();
+    SharedPrefsStorage<String>.primitive(itemKey: "serverIP")
+        .save("http://mairie.toolsr.saint-ganton.fr");
+    ApiCommons.sendToBack();
     log.v("booting app...");
     StorageUtils()
         .getVault("michel")
