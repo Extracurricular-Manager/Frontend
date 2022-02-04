@@ -94,7 +94,7 @@ bool noteUpdateAndCheckIfNotRecent(String key){
 
   Future<void> addToFastCache(String path, ApiDataClass data) async {
     var fCache = await getFastCache();
-    return fCache.put(path,data);
+    return fCache.put(path, data);
   }
 
   Future<void> addToCaches(String path, ApiDataClass data) async {

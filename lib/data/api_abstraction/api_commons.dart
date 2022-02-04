@@ -24,9 +24,7 @@ class ApiCommons {
     final response = await http.get(Uri.parse(generatedUrl));
 
     if (response.statusCode == HttpStatus.ok) {
-      var cache = await StorageUtils().getDefaultCache();
       var result = apiClass.createFromJson(jsonDecode(response.body));
-      cache.put(generatedUrl, result);
       return result;
     } else {
       throw Exception('Failed to load ' + generatedUrl);
@@ -70,7 +68,7 @@ class ApiCommons {
       switch (await NetworkUtils.getConnectivity()) {
         case NetworkStatus.ok:
           var result = await getOperation(apiClass, endpoint);
-          StorageUtils().addToCaches(generatedUrl, result);
+          await StorageUtils().addToCaches(generatedUrl, result);
           return result;
         default:
           return cache.get(generatedUrl);
