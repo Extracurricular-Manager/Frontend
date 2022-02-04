@@ -7,16 +7,17 @@ import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
 import 'package:frontendmobile/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:stash/stash_api.dart';
 
 class ApiCommons {
   static final ApiCommons _api = ApiCommons._internal();
-
+  static SyncStatus status = SyncStatus.notNeeded;
+  static int queueSize = 0;
   factory ApiCommons() {
     return _api;
   }
 
   ApiCommons._internal();
-
   String baseUrl = "/api";
 
   /// basic get operation (options currently passed through the endpoint parameter)
@@ -33,6 +34,7 @@ class ApiCommons {
   }
 
   static Future<bool> sendToBack() async {
+    status = SyncStatus.prepaing;
     MyApp.log.i("Lancement du process d'envoi au back");
     bool result = true;
     var vault = await StorageUtils().getDefaultVault();
@@ -40,12 +42,14 @@ class ApiCommons {
     var keys = await vault.keys;
     if (await NetworkUtils.getConnectivity() == NetworkStatus.ok) {
       MyApp.log.d("Connexion possible. Début du process d'envoi");
+      status = SyncStatus.syncing;
       for (var key in keys) {
         var data = await vault.get(key);
         var postStatut = await postOperation(key, data);
         if (postStatut.statusCode == HttpStatus.ok) {
           await vault.remove(key);
           await cache.put(key, data);
+          _updateQueueNumber(vault);
         } else {
           //TODO : AJOUTER LA PRISE EN CHARGE DU CODE HTTP 210 (CHANGEMENT DE TOKEN)
           result = false;
@@ -54,12 +58,20 @@ class ApiCommons {
     } else {
       MyApp.log.w("Pas de connexion au serveur.");
     }
+    if(await vault.size == 0){
+      status = SyncStatus.notNeeded;
+    }
+
     return result;
   }
 
   Future<void> push<T>(
       BasicApiEndpoint apiClass, String endpoint, dynamic data) async {
     pushDataToQueue(apiClass, endpoint, data);
+  }
+
+  static Future<void> _updateQueueNumber(Vault vault) async {
+    queueSize = await vault.size;
   }
 
   Future<ApiDataClass?> fetch(
@@ -82,8 +94,10 @@ class ApiCommons {
     }
   }
 
-  Future<void> pushDataToQueue<T>(
-      BasicApiEndpoint apiClass, String endpoint, dynamic data) {
+
+  Future<void> pushDataToQueue<T> (
+      BasicApiEndpoint apiClass, String endpoint, dynamic data) async {
+    status = SyncStatus.needed;
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
     return StorageUtils().addToDefaultVault(generatedUrl, data as ApiDataClass);
   }

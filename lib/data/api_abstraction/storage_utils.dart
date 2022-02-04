@@ -17,6 +17,7 @@ class StorageUtils {
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
   String defaultFastCacheName = "FastGetCache";
+  int queueSize = 0;
   static Map<String, DateTime> lastUpdate = {};
   factory StorageUtils() {
     return _StorageUtils;
@@ -82,11 +83,14 @@ class StorageUtils {
         if (noteUpdateAndCheckIfNotRecent(defaultVaultName)) {
           pushProcess();
         }
-      });
+      })
+    ;
   }
 
-  Future<Vault<dynamic>> getDefaultVault() {
-    return getVault(defaultVaultName);
+  Future<Vault<dynamic>> getDefaultVault() async {
+    Vault va = await getVault(defaultVaultName);
+    va.on().listen((event) async {queueSize = await event.source.size;});
+    return va;
   }
 
   Future<void> addToDefaultVault(String path, ApiDataClass data) async {
@@ -112,4 +116,11 @@ class StorageUtils {
   void pushProcess() {
     ApiCommons.sendToBack().then((value) => MyApp.log.d("Envoi terminé"));
   }
+}
+
+enum SyncStatus{
+  needed,
+  notNeeded,
+  prepaing,
+  syncing
 }

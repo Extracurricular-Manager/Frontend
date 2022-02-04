@@ -30,8 +30,6 @@ class NetworkUtils{
     } catch(exception) {
       MyApp.log.d("Petit soucis lors du ping", exception);
     }
-    //var res = await Ping(url, count: 1, timeout: 2, ttl:128).stream.listen((event) { event; }).asFuture().;
-    //await Ping(url, count: 1, timeout: 2, ttl:500).stream.listen((event) { result = (event.error != null  ?NetworkStatus.notAccessible : NetworkStatus.ok); }).asFuture();
     MyApp.log.v(result);
     return result;
   }

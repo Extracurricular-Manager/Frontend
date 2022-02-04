@@ -33,19 +33,11 @@ class MyApp extends StatelessWidget {
   static var log = Logger();
   @override
   Widget build(BuildContext context) {
+    log.v("Booting app...");
     SharedPrefsStorage<String>.primitive(itemKey: "serverIP")
         .save("http://mairie.toolsr.saint-ganton.fr");
+    log.v("Auto sync");
     ApiCommons.sendToBack();
-    log.v("booting app...");
-    StorageUtils()
-        .getVault("michel")
-        .then((value) => value.put("hello", "there"));
-    StorageUtils()
-        .getVault("michel")
-        .then((value) => value.put("bonjour", "ici"));
-    StorageUtils()
-        .getVault("michel")
-        .then((value) => value.size.then((value) => print(value)));
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
