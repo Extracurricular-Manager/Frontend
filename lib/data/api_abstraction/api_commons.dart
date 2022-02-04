@@ -55,6 +55,11 @@ class ApiCommons {
     return result;
   }
 
+  Future<void> push<T>(
+      BasicApiEndpoint apiClass, String endpoint, dynamic data) async {
+    pushDataToQueue(apiClass, endpoint, data);
+  }
+
   Future<void> pushDataToQueue<T>(
       BasicApiEndpoint apiClass, String endpoint, dynamic data) {
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
