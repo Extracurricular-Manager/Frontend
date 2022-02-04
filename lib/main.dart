@@ -4,12 +4,12 @@ import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/routes.dart';
 import 'package:frontendmobile/test/test_view.dart';
 import 'package:logger/logger.dart';
+import 'package:single_item_shared_prefs/single_item_shared_prefs.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'data/api_abstraction/storage_utils.dart';
 
 void main() {
-  //Logger().v("Booting app...");
   DartPingIOS.register();
   runApp(const MyApp());
 
@@ -33,6 +33,9 @@ class MyApp extends StatelessWidget {
   static var log = Logger();
   @override
   Widget build(BuildContext context) {
+    SharedPrefsStorage<String>.primitive(itemKey: "serverIP").save("http://mairie.toolsr.saint-ganton.fr");
+    ApiCommons.SendToBack();
+    log.v("booting app...");
     StorageUtils()
         .getVault("michel")
         .then((value) => value.put("hello", "there"));
@@ -50,7 +53,5 @@ class MyApp extends StatelessWidget {
         )),
         initialRoute: '/',
         onGenerateRoute: RouteGenerator.routes);
-
-//        home: TestView());
   }
 }
