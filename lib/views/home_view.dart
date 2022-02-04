@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:frontendmobile/components/home_tile.dart';
 import 'package:frontendmobile/components/large_home_tile.dart';
+import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -33,16 +34,23 @@ class HomeView extends StatelessWidget {
             ]),
         body: Stack(children: [
           Column(
-            children: const [
-              Expanded(
-                  child: PreparedGridView()),
-              Padding(
+            children: [
+              const Expanded(child: PreparedGridView()),
+              const Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
                 child: LargeHomeTile(onTapPath: '/student_view'),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 22),
                 child: Text("Dernière mise à jour il y a 5 minutes"),
+              ),
+              Padding(
+                padding: EdgeInsets.zero,
+                child: TextButton(
+                  onPressed: () => ApiCommons.sendToBack(),
+                  child: const Text("Synchronisation",
+                      style: TextStyle(color: Colors.blueAccent)),
+                ),
               )
             ],
           ),

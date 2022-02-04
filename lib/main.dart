@@ -24,7 +24,7 @@ void main() {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
-    return ApiCommons.SendToBack();
+    return ApiCommons.sendToBack();
   });
 }
 

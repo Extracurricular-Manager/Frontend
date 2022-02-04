@@ -12,7 +12,7 @@ import 'package:stash_memory/stash_memory.dart';
 
 import '../../main.dart';
 
-class StorageUtils{
+class StorageUtils {
   static final StorageUtils _StorageUtils = StorageUtils._internal();
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
@@ -23,73 +23,80 @@ class StorageUtils{
   }
   StorageUtils._internal();
 
-bool noteUpdateAndCheckIfNotRecent(String key){
-  int timetime = 10;
-  DateTime precedentUpdateTime = lastUpdate[key] ?? DateTime.now();
-  lastUpdate[key] = DateTime.now();
-  var result = DateTime.now().subtract(Duration(seconds: timetime)).isAfter(precedentUpdateTime);
-  //Logger().d("Dernier item ajouté il y a plus de $timetime secondes :" + (result ? "Oui":"Non"));
-  return DateTime.now().subtract(const Duration(seconds: 10)).isAfter(precedentUpdateTime);
-}
+  bool noteUpdateAndCheckIfNotRecent(String key) {
+    int timetime = 10;
+    DateTime precedentUpdateTime = lastUpdate[key] ?? DateTime.now();
+    lastUpdate[key] = DateTime.now();
+    var result = DateTime.now()
+        .subtract(Duration(seconds: timetime))
+        .isAfter(precedentUpdateTime);
+    //Logger().d("Dernier item ajouté il y a plus de $timetime secondes :" + (result ? "Oui":"Non"));
+    return DateTime.now()
+        .subtract(const Duration(seconds: 10))
+        .isAfter(precedentUpdateTime);
+  }
 
-  Future<HiveDefaultCacheStore> _getCacheStore(){
-    return getApplicationDocumentsDirectory().then((value) => newHiveDefaultCacheStore(path: value.absolute.path));
+  Future<HiveDefaultCacheStore> _getCacheStore() {
+    return getApplicationDocumentsDirectory()
+        .then((value) => newHiveDefaultCacheStore(path: value.absolute.path));
   }
 
   Future<Cache<ApiDataClass>> getCache(String cacheName) async {
     var store = await _getCacheStore();
     return store.cache<ApiDataClass>(
-        name:cacheName,
+        name: cacheName,
         eventListenerMode: EventListenerMode.synchronous,
-        expiryPolicy: const ModifiedExpiryPolicy(Duration(days: 7)) )
-          ..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
-                  (event) => print('Key "${event.entry.key}" added to the cache'));
+        expiryPolicy: const ModifiedExpiryPolicy(Duration(days: 7)))
+      ..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
+          (event) => print('Key "${event.entry.key}" added to the cache'));
   }
 
-  Future<Cache<ApiDataClass>> getDefaultCache (){
-  return getCache(defaultCacheName);
+  Future<Cache<ApiDataClass>> getDefaultCache() {
+    return getCache(defaultCacheName);
   }
 
-
-  MemoryCacheStore _getFastCacheStore(){
-  return newMemoryCacheStore();
+  MemoryCacheStore _getFastCacheStore() {
+    return newMemoryCacheStore();
   }
 
-  Future<Cache<ApiDataClass>> getFastCache() async{
-  return _getFastCacheStore().cache(name:defaultCacheName,expiryPolicy: const ModifiedExpiryPolicy(Duration(seconds: 10)))..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
+  Future<Cache<ApiDataClass>> getFastCache() async {
+    return _getFastCacheStore().cache(
+        name: defaultCacheName,
+        expiryPolicy: const ModifiedExpiryPolicy(Duration(seconds: 10)))
+      ..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
           (event) => print('Key "${event.entry.key}" added to the fast cache'));
   }
 
-  Future<HiveDefaultVaultStore> _getVaultStore(){
-    return getApplicationDocumentsDirectory().then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
+  Future<HiveDefaultVaultStore> _getVaultStore() {
+    return getApplicationDocumentsDirectory()
+        .then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
   }
 
   Future<Vault> getVault(String vaultName) async {
     var store = await _getVaultStore();
-    return
-      store.vault(
-        name:vaultName,
-        eventListenerMode: EventListenerMode.synchronous
-      )
+    return store.vault(
+        name: vaultName, eventListenerMode: EventListenerMode.synchronous)
       ..on<VaultEntryCreatedEvent>().listen(
-              (event) => print('Key "${event.entry.key}" added to the vault'))
-    ..on<VaultEntryCreatedEvent>().listen((event) {
-      if(noteUpdateAndCheckIfNotRecent(defaultVaultName)){pushProcess();}
-    });
+          (event) => print('Key "${event.entry.key}" added to the vault'))
+      ..on<VaultEntryCreatedEvent>().listen((event) {
+        if (noteUpdateAndCheckIfNotRecent(defaultVaultName)) {
+          pushProcess();
+        }
+      });
   }
 
-  Future<Vault<dynamic>> getDefaultVault (){
+  Future<Vault<dynamic>> getDefaultVault() {
     return getVault(defaultVaultName);
   }
 
   Future<void> addToDefaultVault(String path, ApiDataClass data) async {
     var vault = await getVault(defaultVaultName);
-    return vault.put(path,data);
+    return vault.put(path, data);
   }
 
   Future<void> addToDefaultCache(String path, ApiDataClass data) async {
     var cache = await getCache(defaultCacheName);
-    return cache.put(path,data);
+    return cache.put(path, data);
   }
 
   Future<void> addToFastCache(String path, ApiDataClass data) async {
@@ -102,8 +109,7 @@ bool noteUpdateAndCheckIfNotRecent(String key){
     await addToDefaultVault(path, data);
   }
 
-  void pushProcess(){
-    ApiCommons.SendToBack().then((value) => MyApp.log.d("Envoi terminé"));
+  void pushProcess() {
+    ApiCommons.sendToBack().then((value) => MyApp.log.d("Envoi terminé"));
   }
-
 }

@@ -31,7 +31,7 @@ class ApiCommons {
     }
   }
 
-  static Future<bool> SendToBack() async {
+  static Future<bool> sendToBack() async {
     bool result = true;
     var vault = await StorageUtils().getDefaultVault();
     var cache = await StorageUtils().getDefaultCache();
