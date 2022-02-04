@@ -60,7 +60,7 @@ class ApiCommons {
     pushDataToQueue(apiClass, endpoint, data);
   }
 
-  Future<ApiDataClass?> fetch<T>(
+  Future<ApiDataClass?> fetch(
       BasicApiEndpoint apiClass, String endpoint) async {
     var fastCache = await StorageUtils().getFastCache();
     var cache = await StorageUtils().getDefaultCache();
