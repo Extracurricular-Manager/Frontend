@@ -8,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stash/stash_api.dart';
 import 'package:stash_hive/stash_hive.dart';
+import 'package:stash_memory/stash_memory.dart';
 
 import '../../main.dart';
 
@@ -15,6 +16,7 @@ class StorageUtils{
   static final StorageUtils _StorageUtils = StorageUtils._internal();
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
+  String defaultFastCacheName = "FastGetCache"
   static Map<String, DateTime> lastUpdate = {};
   factory StorageUtils() {
     return _StorageUtils;
@@ -48,6 +50,16 @@ bool noteUpdateAndCheckIfNotRecent(String key){
   return getCache(defaultCacheName);
   }
 
+
+  MemoryCacheStore _getFastCacheStore(){
+  return newMemoryCacheStore();
+  }
+
+  Future<Cache<ApiDataClass>> getFastCache() async{
+  return _getFastCacheStore().cache(name:defaultCacheName,expiryPolicy: const ModifiedExpiryPolicy(Duration(seconds: 10)))..on<CacheEntryCreatedEvent<Task>>().listen(
+          (event) => print('Key "${event.entry.key}" added to the fast cache'));
+  }
+
   Future<HiveDefaultVaultStore> _getVaultStore(){
     return getApplicationDocumentsDirectory().then((value) => newHiveDefaultVaultStore(path: value.absolute.path));
   }
@@ -76,8 +88,18 @@ bool noteUpdateAndCheckIfNotRecent(String key){
   }
 
   Future<void> addToDefaultCache(String path, ApiDataClass data) async {
-    var vault = await getVault(defaultVaultName);
-    return vault.put(path,data);
+    var cache = await getCache(defaultCacheName);
+    return cache.put(path,data);
+  }
+
+  Future<void> addToFastCache(String path, ApiDataClass data) async {
+    var fCache = await getFastCache();
+    return fCache.put(path,data);
+  }
+
+  Future<void> addToCaches(String path, ApiDataClass data) async {
+    await addToFastCache(path, data);
+    await addToDefaultVault(path, data);
   }
 
   void pushProcess(){
