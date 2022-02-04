@@ -16,7 +16,7 @@ class StorageUtils{
   static final StorageUtils _StorageUtils = StorageUtils._internal();
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
-  String defaultFastCacheName = "FastGetCache"
+  String defaultFastCacheName = "FastGetCache";
   static Map<String, DateTime> lastUpdate = {};
   factory StorageUtils() {
     return _StorageUtils;
@@ -56,7 +56,7 @@ bool noteUpdateAndCheckIfNotRecent(String key){
   }
 
   Future<Cache<ApiDataClass>> getFastCache() async{
-  return _getFastCacheStore().cache(name:defaultCacheName,expiryPolicy: const ModifiedExpiryPolicy(Duration(seconds: 10)))..on<CacheEntryCreatedEvent<Task>>().listen(
+  return _getFastCacheStore().cache(name:defaultCacheName,expiryPolicy: const ModifiedExpiryPolicy(Duration(seconds: 10)))..on<CacheEntryCreatedEvent<ApiDataClass>>().listen(
           (event) => print('Key "${event.entry.key}" added to the fast cache'));
   }
 
