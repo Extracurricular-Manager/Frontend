@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
@@ -30,6 +32,8 @@ void callbackDispatcher() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static StreamController<SyncStatus> status = StreamController();
+
   static var log = Logger();
   @override
   Widget build(BuildContext context) {

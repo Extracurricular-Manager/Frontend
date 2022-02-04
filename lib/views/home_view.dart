@@ -1,19 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:frontendmobile/components/home_tile.dart';
 import 'package:frontendmobile/components/large_home_tile.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
+import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:stash/stash_api.dart';
+
+import '../main.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SyncStatus s2 = SyncStatus.notNeeded;
+    MyApp.status.stream.asBroadcastStream().listen((event) {print(s2);s2 = event;});
+
     return Scaffold(
         appBar: AppBar(
-            title: const Text("Accueil",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            title: Provider(create: (BuildContext context) {  },
+            child:Text(s2.toString(),style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                ),
             backgroundColor: const Color(0xFF214A1F),
             shadowColor: Colors.transparent,
             actions: [
