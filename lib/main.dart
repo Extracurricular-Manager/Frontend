@@ -33,6 +33,7 @@ void callbackDispatcher() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   static var log = Logger();
+  static const Color AppColor = Color(0xFF214A1F);
   @override
   Widget build(BuildContext context) {
     log.v("Booting app...");
@@ -43,8 +44,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-          color: Color(0xFF214A1F),
+            appBarTheme: AppBarTheme(
+          color: AppColor,
         )),
         initialRoute: '/',
         onGenerateRoute: RouteGenerator.routes);
