@@ -32,8 +32,6 @@ void callbackDispatcher() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  static StreamController<SyncStatus> status = StreamController();
-
   static var log = Logger();
   @override
   Widget build(BuildContext context) {

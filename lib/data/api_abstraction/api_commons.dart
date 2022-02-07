@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -11,8 +12,9 @@ import 'package:stash/stash_api.dart';
 
 class ApiCommons {
   static final ApiCommons _api = ApiCommons._internal();
-  static SyncStatus status = SyncStatus.notNeeded;
   static int queueSize = 0;
+  static final StreamController<SyncStatus> _status = StreamController();
+  static Stream<SyncStatus> status = _status.stream.asBroadcastStream();
   factory ApiCommons() {
     return _api;
   }
@@ -34,8 +36,7 @@ class ApiCommons {
   }
 
   static Future<bool> sendToBack() async {
-    status = SyncStatus.prepaing;
-    MyApp.status.add(SyncStatus.prepaing);
+    _status.add(SyncStatus.prepaing);
     MyApp.log.i("Lancement du process d'envoi au back");
     bool result = true;
     var vault = await StorageUtils().getDefaultVault();
@@ -43,8 +44,7 @@ class ApiCommons {
     var keys = await vault.keys;
     if (await NetworkUtils.getConnectivity() == NetworkStatus.ok) {
       MyApp.log.d("Connexion possible. Début du process d'envoi");
-      status = SyncStatus.syncing;
-      MyApp.status.add(SyncStatus.syncing);
+      _status.add(SyncStatus.syncing);
       for (var key in keys) {
         var data = await vault.get(key);
         var postStatut = await postOperation(key, data);
@@ -60,14 +60,12 @@ class ApiCommons {
     } else {
       MyApp.log.w("Pas de connexion au serveur.");
       if(await vault.size > 0){
-        status = SyncStatus.needed;
-        MyApp.status.add(SyncStatus.needed);
+        _status.add(SyncStatus.needed);
       }
-      MyApp.status.add(SyncStatus.needed);
+      _status.add(SyncStatus.needed);
     }
     if(await vault.size == 0){
-      status = SyncStatus.notNeeded;
-      MyApp.status.add(SyncStatus.notNeeded);
+      _status.add(SyncStatus.notNeeded);
     }
     return result;
   }
@@ -104,8 +102,7 @@ class ApiCommons {
 
   Future<void> pushDataToQueue<T> (
       BasicApiEndpoint apiClass, String endpoint, dynamic data) async {
-    status = SyncStatus.needed;
-    MyApp.status.add(SyncStatus.needed);
+    _status.add(SyncStatus.needed);
     final generatedUrl = baseUrl + apiClass.baseUrl + endpoint;
     return StorageUtils().addToDefaultVault(generatedUrl, data as ApiDataClass);
   }

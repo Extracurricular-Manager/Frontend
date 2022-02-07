@@ -17,7 +17,8 @@ class StorageUtils {
   String defaultCacheName = "GetCache";
   String defaultVaultName = "PostWaitingVault";
   String defaultFastCacheName = "FastGetCache";
-  int queueSize = 0;
+  static final StreamController<int> _vaultSize = StreamController();
+  static Stream<int> vaultSize = _vaultSize.stream.asBroadcastStream();
   static Map<String, DateTime> lastUpdate = {};
   factory StorageUtils() {
     return _StorageUtils;
@@ -75,21 +76,23 @@ class StorageUtils {
 
   Future<Vault> getVault(String vaultName) async {
     var store = await _getVaultStore();
-    return store.vault(
-        name: vaultName, eventListenerMode: EventListenerMode.synchronous)
-      ..on<VaultEntryCreatedEvent>().listen(
-          (event) => print('Key "${event.entry.key}" added to the vault'))
-      ..on<VaultEntryCreatedEvent>().listen((event) {
+    var vault =  store.vault(
+        name: vaultName, eventListenerMode: EventListenerMode.synchronous);
+    vault.on<VaultEntryCreatedEvent>().listen(
+            (event) => print('Key "${event.entry.key}" added to the vault'));
+    vault.on<VaultEntryCreatedEvent>().listen((event) {
         if (noteUpdateAndCheckIfNotRecent(defaultVaultName)) {
           pushProcess();
         }
-      })
-    ;
+      });
+    vault.on<VaultEntryCreatedEvent>().listen((event) async { _vaultSize.add(await event.source.size);});
+    vault.on<VaultEntryRemovedEvent>().listen((event) async { _vaultSize.add(await event.source.size);});
+    return vault;
   }
 
   Future<Vault<dynamic>> getDefaultVault() async {
     Vault va = await getVault(defaultVaultName);
-    va.on().listen((event) async {queueSize = await event.source.size;});
+    va.on().listen((event) async {_vaultSize.add(await event.source.size);});
     return va;
   }
 
@@ -116,6 +119,12 @@ class StorageUtils {
   void pushProcess() {
     ApiCommons.sendToBack().then((value) => MyApp.log.d("Envoi terminé"));
   }
+
+  Future<int> getDefaultVaultSize() async {
+    var defVault = await getDefaultVault();
+    return await defVault.size;
+  }
+
 }
 
 enum SyncStatus{

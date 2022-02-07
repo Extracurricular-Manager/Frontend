@@ -1,30 +1,20 @@
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:frontendmobile/components/home_tile.dart';
 import 'package:frontendmobile/components/large_home_tile.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:stash/stash_api.dart';
-
-import '../main.dart';
+import 'package:frontendmobile/data/api_data_classes/child.dart';
+import 'package:frontendmobile/data/childEndpoint.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SyncStatus s2 = SyncStatus.notNeeded;
-    MyApp.status.stream.asBroadcastStream().listen((event) {print(s2);s2 = event;});
-
+    ChildEndpoint().push(ChildData());
     return Scaffold(
         appBar: AppBar(
-            title: Provider(create: (BuildContext context) {  },
-            child:Text(s2.toString(),style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                ),
+            title: const Text("Accueil"),
             backgroundColor: const Color(0xFF214A1F),
             shadowColor: Colors.transparent,
             actions: [
@@ -45,24 +35,16 @@ class HomeView extends StatelessWidget {
             ]),
         body: Stack(children: [
           Column(
-            children: [
-              const Expanded(child: PreparedGridView()),
-              const Padding(
+            children: const [
+              Expanded(child: PreparedGridView()),
+              Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
                 child: LargeHomeTile(onTapPath: '/student_view'),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 22),
-                child: Text("Dernière mise à jour il y a 5 minutes"),
-              ),
               Padding(
-                padding: EdgeInsets.zero,
-                child: TextButton(
-                  onPressed: () => ApiCommons.sendToBack(),
-                  child: const Text("Synchronisation",
-                      style: TextStyle(color: Colors.blueAccent)),
-                ),
-              )
+                padding: EdgeInsets.only(top: 8, bottom: 22),
+                child: ButtomSyncStatusWidget(),
+              ),
             ],
           ),
           Ink(
@@ -91,7 +73,6 @@ class PreparedListView extends StatelessWidget {
       // Provide a builder function. This is where the magic happens.
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
-        final item = list[index];
         return const LargeHomeTile(
           onTapPath: '/canteen_view',
         );
@@ -115,4 +96,59 @@ class PreparedGridView extends StatelessWidget {
       children: const [HomeTile(), HomeTile(), HomeTile()],
     );
   }
+}
+
+
+
+class ButtomSyncStatusWidget extends StatefulWidget {
+  const ButtomSyncStatusWidget({Key? key}) : super(key: key);
+
+  @override
+  _ButtomSyncStatusWidget createState() => _ButtomSyncStatusWidget();
+}
+
+class _ButtomSyncStatusWidget extends State<ButtomSyncStatusWidget> {
+  late SyncStatus status = SyncStatus.notNeeded;
+  late int itemsToSync = 0;
+  @override
+  void setState(fn) {
+    if(mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    StorageUtils().getDefaultVaultSize().then((value) => itemsToSync = value);
+    ApiCommons.status.listen((event) {setState(() {
+      status = event;
+    });});
+    StorageUtils.vaultSize.listen((event) {setState(() {
+      itemsToSync = event;
+    });});
+    return syncStatusText(status);
+  }
+
+  Widget syncStatusText(SyncStatus stat){
+    switch (stat){
+      case SyncStatus.notNeeded:
+        return const Text("Aucun élément à synchroniser");
+      case SyncStatus.needed:
+        return Row(mainAxisAlignment: MainAxisAlignment.center,children:[Text("$itemsToSync Élément${itemsToSync>1?'s':''} en attente"),syncTextButton()]); //ajouter bouton de sync
+      case SyncStatus.prepaing:
+        return const Text("Préparation pour la synchronisation");
+      case SyncStatus.syncing:
+        return Text("Synchronisation en cours, $itemsToSync élément${itemsToSync>1?'s':''} restant${itemsToSync>1?'s':''}");
+
+    }
+  }
+
+  TextButton syncTextButton(){
+    return TextButton(
+      onPressed: () => ApiCommons.sendToBack(),
+      child: const Text("Synchroniser",
+          style: TextStyle(color: Colors.blueAccent)),
+    );
+  }
+
 }
