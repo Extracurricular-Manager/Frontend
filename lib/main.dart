@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            appBarTheme: AppBarTheme(
+            appBarTheme: const AppBarTheme(
           color: AppColor,
         )),
         initialRoute: '/',

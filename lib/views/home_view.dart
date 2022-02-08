@@ -17,6 +17,12 @@ class HomeView extends StatelessWidget {
             title: const Text("Accueil"),
             backgroundColor: const Color(0xFF214A1F),
             shadowColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.sensor_door_outlined),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 10.0),
@@ -26,10 +32,6 @@ class HomeView extends StatelessWidget {
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.sensor_door_outlined,
-                        size: 26.0,
-                      ),
                     )),
               )
             ]),
@@ -98,8 +100,6 @@ class PreparedGridView extends StatelessWidget {
   }
 }
 
-
-
 class ButtomSyncStatusWidget extends StatefulWidget {
   const ButtomSyncStatusWidget({Key? key}) : super(key: key);
 
@@ -112,7 +112,7 @@ class _ButtomSyncStatusWidget extends State<ButtomSyncStatusWidget> {
   late int itemsToSync = 0;
   @override
   void setState(fn) {
-    if(mounted) {
+    if (mounted) {
       super.setState(fn);
     }
   }
@@ -120,35 +120,41 @@ class _ButtomSyncStatusWidget extends State<ButtomSyncStatusWidget> {
   @override
   Widget build(BuildContext context) {
     StorageUtils().getDefaultVaultSize().then((value) => itemsToSync = value);
-    ApiCommons.status.listen((event) {setState(() {
-      status = event;
-    });});
-    StorageUtils.vaultSize.listen((event) {setState(() {
-      itemsToSync = event;
-    });});
+    ApiCommons.status.listen((event) {
+      setState(() {
+        status = event;
+      });
+    });
+    StorageUtils.vaultSize.listen((event) {
+      setState(() {
+        itemsToSync = event;
+      });
+    });
     return syncStatusText(status);
   }
 
-  Widget syncStatusText(SyncStatus stat){
-    switch (stat){
+  Widget syncStatusText(SyncStatus stat) {
+    switch (stat) {
       case SyncStatus.notNeeded:
         return const Text("Aucun élément à synchroniser");
       case SyncStatus.needed:
-        return Row(mainAxisAlignment: MainAxisAlignment.center,children:[Text("$itemsToSync Élément${itemsToSync>1?'s':''} en attente"),syncTextButton()]); //ajouter bouton de sync
+        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text("$itemsToSync Élément${itemsToSync > 1 ? 's' : ''} en attente"),
+          syncTextButton()
+        ]); //ajouter bouton de sync
       case SyncStatus.prepaing:
         return const Text("Préparation pour la synchronisation");
       case SyncStatus.syncing:
-        return Text("Synchronisation en cours, $itemsToSync élément${itemsToSync>1?'s':''} restant${itemsToSync>1?'s':''}");
-
+        return Text(
+            "Synchronisation en cours, $itemsToSync élément${itemsToSync > 1 ? 's' : ''} restant${itemsToSync > 1 ? 's' : ''}");
     }
   }
 
-  TextButton syncTextButton(){
+  TextButton syncTextButton() {
     return TextButton(
       onPressed: () => ApiCommons.sendToBack(),
       child: const Text("Synchroniser",
           style: TextStyle(color: Colors.blueAccent)),
     );
   }
-
 }
