@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     log.v("Booting app...");
     SharedPrefsStorage<String>.primitive(itemKey: "serverIP")
-        .save("http://mairie.toolsr.saint-ganton.fr");
+        .save("http://148.60.11.219");
     log.v("Auto sync");
     ApiCommons.sendToBack();
     return MaterialApp(
