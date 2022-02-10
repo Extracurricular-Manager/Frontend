@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/home_tile.dart';
 import 'package:frontendmobile/components/large_home_tile.dart';
+import 'package:frontendmobile/components/presence.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
 import 'package:frontendmobile/data/api_data_classes/child.dart';
@@ -41,7 +42,11 @@ class HomeView extends StatelessWidget {
               Expanded(child: PreparedGridView()),
               Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
-                child: LargeHomeTile(onTapPath: '/student_view'),
+                child: LargeHomeTile(
+                    onTapPath: "/student_view",
+                    iconName: Icons.accessibility,
+                    title: "Title",
+                    subtitle: "Subtitle"),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 22),
@@ -76,8 +81,10 @@ class PreparedListView extends StatelessWidget {
       // Convert each item into a widget based on the type of item it is.
       itemBuilder: (context, index) {
         return const LargeHomeTile(
-          onTapPath: '/canteen_view',
-        );
+            onTapPath: "/student_view",
+            iconName: Icons.accessibility,
+            title: "Title",
+            subtitle: "Subtitle");
       },
     ).build(context);
   }
@@ -95,7 +102,27 @@ class PreparedGridView extends StatelessWidget {
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       padding: const EdgeInsets.only(left: 10, right: 10),
-      children: const [HomeTile(), HomeTile(), HomeTile()],
+      children: const [
+        HomeTile(
+          title: "title",
+          path: "/night_nusery_view",
+          subtitle: "subtitle",
+          iconName: Icons.accessibility,
+        ),
+        HomeTile(
+          title: "title",
+          path: "/night_nusery_view",
+          subtitle: "subtitle",
+          iconName: Icons.accessibility,
+        ),
+        //Presence(currentItem: SelectedItem.notSelected,),
+        HomeTile(
+          title: "title",
+          path: "/night_nusery_view",
+          subtitle: "subtitle",
+          iconName: Icons.accessibility,
+        )
+      ],
     );
   }
 }
@@ -110,6 +137,7 @@ class ButtomSyncStatusWidget extends StatefulWidget {
 class _ButtomSyncStatusWidget extends State<ButtomSyncStatusWidget> {
   late SyncStatus status = SyncStatus.notNeeded;
   late int itemsToSync = 0;
+
   @override
   void setState(fn) {
     if (mounted) {

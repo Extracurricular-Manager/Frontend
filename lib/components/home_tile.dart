@@ -1,8 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeTile extends StatelessWidget {
-  const HomeTile({Key? key}) : super(key: key);
+  final String title;
+  final String subtitle;
+  final String path;
+  final IconData iconName;
+
+  const HomeTile({
+    Key? key,
+    required this.title,
+    required this.path,
+    required this.subtitle,
+    required this.iconName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,22 +22,23 @@ class HomeTile extends StatelessWidget {
       child: Container(
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, "/canteen_view");
+            Navigator.pushNamed(context, path);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: <Widget>[
                 Icon(
-                  Icons.accessibility,
+                  iconName,
                   size: 30,
                 ),
-                Text("Titre",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Spacer(),
-                Text("sous-titre", style: TextStyle(color: Colors.grey))
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text(subtitle, style: const TextStyle(color: Colors.grey))
               ],
             ),
           ),

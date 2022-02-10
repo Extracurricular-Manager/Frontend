@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class LargeHomeTile extends StatelessWidget {
-  const LargeHomeTile({Key? key, required this.onTapPath}) : super(key: key);
-
   final String onTapPath;
+  final String title;
+  final String subtitle;
+  final IconData iconName;
+
+  const LargeHomeTile(
+      {Key? key,
+      required this.onTapPath,
+      required this.iconName,
+      required this.title,
+      required this.subtitle})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 500),
+      constraints: const BoxConstraints(maxWidth: 500),
       child: Card(
         child: InkWell(
           onTap: () {
@@ -20,16 +29,16 @@ class LargeHomeTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(
-                  Icons.accessibility,
+                  iconName,
                   size: 30,
                 ),
-                Text("Titre",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Spacer(),
-                Text("sous-titre", style: TextStyle(color: Colors.grey))
+                Text(title,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text(subtitle, style: const TextStyle(color: Colors.grey))
               ],
             ),
           ),
