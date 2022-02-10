@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
 import 'package:frontendmobile/main.dart';
 
 class LoginViewDynamic extends StatefulWidget {
@@ -10,7 +13,7 @@ class LoginViewDynamic extends StatefulWidget {
 }
 
 class _LoginViewDynamic extends State<LoginViewDynamic> {
-  LoginUiState globalState = LoginUiState.login;
+  LoginUiState globalState = LoginUiState.loading;
 
   @override
   void setState(fn) {
@@ -34,15 +37,18 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
     late String uname;
 
 
-    switch (this.globalState){
+    switch (globalState){
       case LoginUiState.loading:
-        return CircularProgressIndicator(color:Colors.white);
+        loginProcess().then((val)=>{});
+        return const CircularProgressIndicator(color:Colors.white);
       case LoginUiState.login:
+        final TextEditingController IdController = TextEditingController();
+        final TextEditingController PwController = TextEditingController();
         return Card(
             elevation:5,
             child:Container(
               padding: EdgeInsets.all(20),
-              constraints: BoxConstraints(maxWidth: 350),
+
               child: Wrap(
                 runSpacing: 8,
                 crossAxisAlignment: WrapCrossAlignment.start,
@@ -53,6 +59,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                         fontWeight: FontWeight.bold,
                         color: MyApp.AppColor)),
                   TextFormField(
+                    controller: IdController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Nom d’utilisateur",
@@ -60,6 +67,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                     onChanged: (val) => uname = val,
                   ),
                   TextFormField(
+                    controller: PwController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Mot de passe",
@@ -82,7 +90,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                           color:Colors.white,
                           child: const Text("Mot de passe oublié"),
                           textColor: MyApp.AppColor,
-                          onPressed: forgotAction,
+                          onPressed: () => {changeState(LoginUiState.setPasswd)},
                         ),
                     ],)
                 ],),
@@ -92,7 +100,6 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
             elevation:5,
             child:Container(
               padding: EdgeInsets.all(20),
-              constraints: BoxConstraints(maxWidth: 350),
               child: Wrap(
                 runSpacing: 8,
                 crossAxisAlignment: WrapCrossAlignment.start,
@@ -109,6 +116,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                       labelText: "Nouveau mot de passe",
                     ),
                     obscureText: true,
+                    initialValue: "",
                     onChanged: (val) => uname = val,
                   ),
                   TextFormField(
@@ -117,6 +125,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                         labelText: "Nouveau mot de passe (Confirmation)",
                       ),
                       obscureText: true,
+                      initialValue: "",
                       onChanged: (val) => pwd = val
                   ),
                   Wrap(
@@ -133,13 +142,31 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                         color:Colors.white,
                         child: const Text("Annuler"),
                         textColor: MyApp.AppColor,
-                        onPressed: () => {setState(() {globalState = LoginUiState.login;})},
+                        onPressed: () => {setState(() {changeState(LoginUiState.login);})},
                       ),
                     ],)
                 ],),
             ));
       case LoginUiState.offline:
-        return Container();// TODO: Handle this case.
+        return Wrap(direction: Axis.vertical,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+          const Icon(Icons.cloud_off,size: 70,color: Colors.white,),
+          const Text("Le service semble être inaccessible",style: TextStyle(color:Colors.white),),
+            const SizedBox(height: 50,),
+            Wrap(
+              spacing: 10,
+              children: [MaterialButton(
+              onPressed:() => Navigator.popAndPushNamed(context, "/login_view") ,
+              color:Colors.white,
+              textColor: MyApp.AppColor,
+              child: const Text("Réessayer"),),
+              MaterialButton(
+              onPressed:() => Navigator.pop(context) ,
+              color:Colors.white,
+              textColor: MyApp.AppColor,
+              child: const Text("Retour"),)],)
+        ],);
       case LoginUiState.caching:
         return Container();// TODO: Handle this case.
       case LoginUiState.forgot:
@@ -149,24 +176,36 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
   }
 
   void loginAction(){
-
+    Navigator.popAndPushNamed(context, '/home_view');
   }
 
   void forgotAction(){
-    setState(() {
-      globalState = LoginUiState.setPasswd;
-    });
-
-    return null;
+    changeState(LoginUiState.setPasswd);
   }
 
   void resetAction(){
 
   }
 
+  void pwdResetAction(){
+
+  }
+
+  Future<void> loginProcess() async {
+    if(await NetworkUtils.getConnectivity() == NetworkStatus.ok){
+      changeState(LoginUiState.login);
+    } else{
+      changeState(LoginUiState.offline);
+    }
+  }
+  
+  void changeState(LoginUiState newState){
+    setState(() {
+      globalState = newState;
+    });
+  }
+
 }
-
-
 
 enum LoginUiState{
   loading,
