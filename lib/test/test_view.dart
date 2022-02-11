@@ -175,3 +175,70 @@ initiliazeMap3(students, mapChild);
   } */
 
 }
+/*       case LoginUiState.forgot:
+        return Container(child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: constraints.biggest.height * 0.15,
+                width: constraints.biggest.width,
+                child: Text("Mot de passe oublié ?",
+                    style: TextStyle(
+                        fontSize: 17 * MediaQuery.of(context).textScaleFactor,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF214A1F))),
+              ),
+              const Text(
+                "Si vous validez la sélection, une demande de modificaiton de mot de passe sera envoyée.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: constraints.biggest.height * 0.05),
+              Container(
+                height: constraints.biggest.height * 0.24,
+                width: constraints.biggest.width,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Nom d’utilisateur",
+                  ),
+                  //controller: ,
+                ),
+              ),
+              SizedBox(height: constraints.biggest.height * 0.06),
+              SizedBox(
+                  height: constraints.biggest.height * 0.24,
+                  width: constraints.biggest.width,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      Wrap(
+                        spacing: 8,
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          MaterialButton(
+                            color: Colors.green,
+                            child: const Text("Poursuivre"),
+                            textColor: Colors.white,
+                            onPressed: () => {},
+                          ),
+                          MaterialButton(
+                              color: Colors.red,
+                              child: const Text("Annuler"),
+                              textColor: Colors.white,
+                              onPressed: () => {
+                                    Navigator.pop(context),
+                                  })
+                        ],
+                      ),
+                    ],
+                  ))
+            ],
+          );
+        }));
+    }
+  } */
