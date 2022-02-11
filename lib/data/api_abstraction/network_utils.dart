@@ -14,9 +14,8 @@ class NetworkUtils{
     return response.statusCode == HttpStatus.ok;
   }
 
-  static Future<NetworkStatus> getConnectivity() async {
-     var key = await SharedPrefsStorage<String>.primitive(itemKey: "serverIP").get();
-     return Connectivity().checkConnectivity().then((value) => value != ConnectivityResult.none ? _ping(key as String) : _noNetworkStatus()
+  static Future<NetworkStatus> getConnectivity({String serverUrl = "https://google.com"}) async {
+     return Connectivity().checkConnectivity().then((value) => value != ConnectivityResult.none ? _ping(serverUrl) : _noNetworkStatus()
     );
   }
 
