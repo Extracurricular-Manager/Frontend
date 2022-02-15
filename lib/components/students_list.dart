@@ -5,8 +5,9 @@ import 'package:frontendmobile/components/search_bar.dart';
 class StudentsList extends StatefulWidget {
   final String title;
   final List<String> students;
+  final Color choiceColor;
 
-  const StudentsList({Key? key, required this.title, required this.students})
+  const StudentsList({Key? key, required this.title, required this.students, required this.choiceColor})
       : super(key: key);
 
   @override
@@ -45,7 +46,6 @@ class _StudentsListState extends State<StudentsList> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: const Color(0xFF214A1F),
           title: Text(widget.title),
           shadowColor: Colors.transparent,
           actions: [
@@ -99,6 +99,9 @@ class _StudentsListState extends State<StudentsList> {
           ),
           ElevatedButton(
             onPressed: emptyQueue,
+            style: ElevatedButton.styleFrom(
+              primary: widget.choiceColor,
+            ),
             child: const Text("Validez l'appel"),
           )
         ]));

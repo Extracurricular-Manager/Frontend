@@ -2,8 +2,8 @@
     package="periscol.mobile.frontendmobile">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="frontendmobile"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Periscol"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

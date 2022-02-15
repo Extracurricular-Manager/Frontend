@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendmobile/components/home_tile.dart';
 import 'package:frontendmobile/components/large_home_tile.dart';
-import 'package:frontendmobile/components/presence.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
 import 'package:frontendmobile/data/api_data_classes/child.dart';
 import 'package:frontendmobile/data/childEndpoint.dart';
+import 'package:frontendmobile/other/changeColor.dart';
+import 'package:frontendmobile/other/providers.dart';
 
-class HomeView extends StatelessWidget {
+import 'login_view_dynamic.dart';
+
+class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ChildEndpoint().push(ChildData());
+    final settings = ref.watch(settingsProvider);
     return Scaffold(
         appBar: AppBar(
             title: const Text("Accueil"),
-            backgroundColor: const Color(0xFF214A1F),
             shadowColor: Colors.transparent,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/login_view');
               },
               icon: const Icon(Icons.sensor_door_outlined),
             ),
@@ -29,12 +33,22 @@ class HomeView extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 10.0),
                 child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/login_view');
+                      Navigator.pushNamed(context, '/');
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
                     )),
-              )
+              ),
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () => {
+                    showDialog<dynamic>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ColorSettingsPage();
+                        })
+                },
+              ),
             ]),
         body: Stack(children: [
           Column(
@@ -57,9 +71,9 @@ class HomeView extends StatelessWidget {
           Ink(
             width: MediaQuery.of(context).size.width,
             height: 100,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              color: Color(0xFF214A1F),
+              color: settings.colorSelected,
             ),
           )
         ]));

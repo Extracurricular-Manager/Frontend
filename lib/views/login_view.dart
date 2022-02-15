@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontendmobile/other/providers.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
 
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFF214A1F),
+        backgroundColor: settings.colorSelected,
         body: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.25),
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
@@ -45,7 +47,7 @@ class LoginPage extends StatelessWidget {
                                           style: TextStyle(
                                             fontSize: 17 * MediaQuery.of(context).textScaleFactor,
                                               fontWeight: FontWeight.bold,
-                                              color: Color(0xFF214A1F))),
+                                              color: settings.colorSelected)),
                                     ),
                                     SizedBox(height: constraints.biggest.height*0.05),
                                     Container(
@@ -81,7 +83,7 @@ class LoginPage extends StatelessWidget {
                                             style: TextStyle(color: Colors.white)),
                                         style: OutlinedButton.styleFrom(
                                           primary: Colors.white,
-                                          backgroundColor: const Color(0xFF214A1F),
+                                          backgroundColor: settings.colorSelected,
                                         ),
                                         onPressed: () {
                                           Navigator.pushNamed(context, '/home_view');

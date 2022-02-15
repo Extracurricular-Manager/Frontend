@@ -54,7 +54,6 @@ class StudentView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           shadowColor: Colors.transparent,
-          backgroundColor: const Color(0xFF214A1F),
           //title: const Text('Page Eleve'),
           title: Center(
             child: Column(

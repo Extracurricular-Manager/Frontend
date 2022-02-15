@@ -1,15 +1,19 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
+import 'package:frontendmobile/other/providers.dart';
 
 import '../main.dart';
 
-class ServerListView extends StatelessWidget {
+class ServerListView extends ConsumerWidget {
   const ServerListView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
     return Scaffold(
         body:Center(child:
           Card(child:
@@ -20,17 +24,17 @@ class ServerListView extends StatelessWidget {
               children: [Text("Sélectionner un serveur", style: TextStyle(
                   fontSize: 23 * MediaQuery.of(context).textScaleFactor,
                   fontWeight: FontWeight.bold,
-                  color: MyApp.AppColor),),
+                  color: settings.colorSelected),),
                 ListView.builder(
                 itemCount: 2,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return const makeListTile(cityName: "Saint-Ganton", serverUrl: "http://148.60.11.219/");
+                  return makeListTile(cityName: "Saint-Ganton", serverUrl: "http://148.60.11.219/", choicecolor: settings.colorSelected);
                 },
               )],
             ),
           ),)),
-        backgroundColor: MyApp.AppColor
+        backgroundColor: settings.colorSelected
     );
   }
 
@@ -40,8 +44,9 @@ class ServerListView extends StatelessWidget {
 class makeListTile extends StatefulWidget {
   final String cityName;
   final String serverUrl;
+  final Color choicecolor;
 
-  const makeListTile({Key? key, required this.cityName, required this.serverUrl}) : super(key: key);
+  const makeListTile({Key? key, required this.cityName, required this.serverUrl, required this.choicecolor}) : super(key: key);
 
   @override
   _makeListTile createState() => _makeListTile();
@@ -53,7 +58,7 @@ class _makeListTile extends State<makeListTile>{
   @override
     Widget build(BuildContext context) {
     NetworkStatus? netState;
-    StatefulWidget networkState = listItemNetworkIndicator(key:_key,ns: netState,);
+    StatefulWidget networkState = listItemNetworkIndicator(key:_key,ns: netState,choicecolor:widget.choicecolor);
     NetworkUtils.getConnectivity(serverUrl: widget.serverUrl).then((val) => {
       _key.currentState?.updateData(val)});
 
@@ -66,7 +71,8 @@ class _makeListTile extends State<makeListTile>{
 
 class listItemNetworkIndicator extends StatefulWidget {
   NetworkStatus? ns;
-  listItemNetworkIndicator({Key? key, this.ns}) : super(key: key);
+  final Color choicecolor;
+  listItemNetworkIndicator({Key? key, this.ns, required this.choicecolor}) : super(key: key);
 
   @override
   _listItemNetworkIndicator createState() => _listItemNetworkIndicator();
@@ -81,7 +87,6 @@ class _listItemNetworkIndicator extends State<listItemNetworkIndicator>{
     @override
     Widget build(BuildContext context) {
 
-
       switch (widget.ns){
 
         case null:
@@ -91,7 +96,7 @@ class _listItemNetworkIndicator extends State<listItemNetworkIndicator>{
         case NetworkStatus.notAccessible:
           return const Text("Serveur inaccessible", style:TextStyle(color:Colors.red));
         case NetworkStatus.ok:
-          return const Text("En ligne", style:TextStyle(color:MyApp.AppColor));
+          return Text("En ligne", style:TextStyle(color:widget.choicecolor));
       }
 
     }

@@ -1,19 +1,25 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
-import 'package:frontendmobile/main.dart';
+import 'package:frontendmobile/other/providers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginViewDynamic extends StatefulWidget {
+
+class LoginViewDynamic extends ConsumerStatefulWidget {
+
   const LoginViewDynamic({Key? key}) : super(key: key);
 
   @override
   _LoginViewDynamic createState() => _LoginViewDynamic();
 }
 
-class _LoginViewDynamic extends State<LoginViewDynamic> {
+class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
   LoginUiState globalState = LoginUiState.loading;
+
+  FocusNode myFocusNode = new FocusNode();
+  FocusNode myFocusNode1 = new FocusNode();
+  bool visible = false;
 
   @override
   void setState(fn) {
@@ -24,12 +30,17 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
     return Scaffold(
-        body: Center(child: userViewBuilder()),
-        backgroundColor: const Color(0xFF214A1F));
+        resizeToAvoidBottomInset: false,
+        backgroundColor: settings.colorSelected,
+        body: Center(
+            child:
+             userViewBuilder(settings.colorSelected)
+       ));
   }
 
-  Widget userViewBuilder() {
+  Widget userViewBuilder(Color colorSelected) {
     late String pwd;
     late String pwd2;
     late String uname;
@@ -53,31 +64,52 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                       style: TextStyle(
                           fontSize: 23 * MediaQuery.of(context).textScaleFactor,
                           fontWeight: FontWeight.bold,
-                          color: MyApp.AppColor)),
+                          color: colorSelected)),
                   TextFormField(
                     controller: IdController,
-                    decoration: const InputDecoration(
+                    focusNode: myFocusNode,
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(),
+                      focusedBorder:OutlineInputBorder(
+                        borderSide: BorderSide(color: colorSelected, width: 2.0),
+                      ),
                       labelText: "Nom d’utilisateur",
+                      labelStyle: TextStyle(
+                        color: myFocusNode.hasFocus ? colorSelected : Colors.grey,
+
+                      )
                     ),
                     onChanged: (val) => uname = val,
                   ),
                   TextFormField(
                       controller: PwController,
-                      decoration: const InputDecoration(
+                      focusNode: myFocusNode1,
+                      decoration: InputDecoration(
+                          suffixIcon: IconButton(icon: Icon(visible ? Icons.visibility : Icons.visibility_off, color: colorSelected),
+                            onPressed: () {
+                              setState(() {
+                                visible=!visible;
+                              });
+                            },),
+                        focusedBorder:OutlineInputBorder(
+                          borderSide: BorderSide(color: colorSelected, width: 2.0),
+                        ),
                         border: OutlineInputBorder(),
                         labelText: "Mot de passe",
+                        labelStyle: TextStyle(
+                          color: myFocusNode1.hasFocus ? colorSelected : Colors.grey,
+                        )
                       ),
-                      obscureText: true,
+                      obscureText: visible,
                       onChanged: (val) => pwd = val
-                      //controller: ,
-                      ),
+                    //controller: ,
+                  ),
                   Wrap(
                     spacing: 8,
                     direction: Axis.horizontal,
                     children: [
                       MaterialButton(
-                        color: MyApp.AppColor,
+                        color: colorSelected,
                         child: const Text("Connexion"),
                         textColor: Colors.white,
                         onPressed: loginAction,
@@ -85,7 +117,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                       MaterialButton(
                         color: Colors.white,
                         child: const Text("Mot de passe oublié"),
-                        textColor: MyApp.AppColor,
+                        textColor: colorSelected,
                         onPressed: () => {changeState(LoginUiState.forgot)},
                       ),
                     ],
@@ -106,7 +138,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                       style: TextStyle(
                           fontSize: 23 * MediaQuery.of(context).textScaleFactor,
                           fontWeight: FontWeight.bold,
-                          color: MyApp.AppColor)),
+                          color: colorSelected)),
                   const Text(
                       "Votre compte est neuf ou vous avez demandé une réinitialisation de mot de passe. Saisissez-en un nouveau pour poursuivre."),
                   TextFormField(
@@ -131,7 +163,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                     direction: Axis.horizontal,
                     children: [
                       MaterialButton(
-                        color: MyApp.AppColor,
+                        color: colorSelected,
                         child: const Text("Poursuivre"),
                         textColor: Colors.white,
                         onPressed: loginAction,
@@ -139,7 +171,7 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                       MaterialButton(
                         color: Colors.white,
                         child: const Text("Annuler"),
-                        textColor: MyApp.AppColor,
+                        textColor: colorSelected,
                         onPressed: () => {
                           setState(() {
                             changeState(LoginUiState.login);
@@ -175,13 +207,13 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
                   onPressed: () =>
                       Navigator.popAndPushNamed(context, "/login_view"),
                   color: Colors.white,
-                  textColor: MyApp.AppColor,
+                  textColor: colorSelected,
                   child: const Text("Réessayer"),
                 ),
                 MaterialButton(
                   onPressed: () => Navigator.pop(context),
                   color: Colors.white,
-                  textColor: MyApp.AppColor,
+                  textColor: colorSelected,
                   child: const Text("Retour"),
                 )
               ],
@@ -193,68 +225,68 @@ class _LoginViewDynamic extends State<LoginViewDynamic> {
       case LoginUiState.forgot:
         return Container(child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                height: constraints.biggest.height * 0.15,
-                width: constraints.biggest.width,
-                child: Text("Mot de passe oublié ?",
-                    style: TextStyle(
-                        fontSize: 17 * MediaQuery.of(context).textScaleFactor,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF214A1F))),
-              ),
-              const Text(
-                "Si vous validez la sélection, une demande de modificaiton de mot de passe sera envoyée.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: constraints.biggest.height * 0.05),
-              Container(
-                height: constraints.biggest.height * 0.24,
-                width: constraints.biggest.width,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Nom d’utilisateur",
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: constraints.biggest.height * 0.15,
+                    width: constraints.biggest.width,
+                    child: Text("Mot de passe oublié ?",
+                        style: TextStyle(
+                            fontSize: 17 * MediaQuery.of(context).textScaleFactor,
+                            fontWeight: FontWeight.bold,
+                            color: colorSelected)),
                   ),
-                  //controller: ,
-                ),
-              ),
-              SizedBox(height: constraints.biggest.height * 0.06),
-              SizedBox(
-                  height: constraints.biggest.height * 0.24,
-                  width: constraints.biggest.width,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Wrap(
-                        spacing: 8,
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.center,
+                  const Text(
+                    "Si vous validez la sélection, une demande de modificaiton de mot de passe sera envoyée.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: constraints.biggest.height * 0.05),
+                  Container(
+                    height: constraints.biggest.height * 0.24,
+                    width: constraints.biggest.width,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Nom d’utilisateur",
+                      ),
+                      //controller: ,
+                    ),
+                  ),
+                  SizedBox(height: constraints.biggest.height * 0.06),
+                  SizedBox(
+                      height: constraints.biggest.height * 0.24,
+                      width: constraints.biggest.width,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                          MaterialButton(
-                            color: Colors.green,
-                            child: const Text("Poursuivre"),
-                            textColor: Colors.white,
-                            onPressed: () => {},
-                          ),
-                          MaterialButton(
-                              color: Colors.red,
-                              child: const Text("Annuler"),
-                              textColor: Colors.white,
-                              onPressed: () => {
+                          Wrap(
+                            spacing: 8,
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              MaterialButton(
+                                color: Colors.green,
+                                child: const Text("Poursuivre"),
+                                textColor: Colors.white,
+                                onPressed: () => {},
+                              ),
+                              MaterialButton(
+                                  color: Colors.red,
+                                  child: const Text("Annuler"),
+                                  textColor: Colors.white,
+                                  onPressed: () => {
                                     Navigator.pop(context),
                                   })
+                            ],
+                          ),
                         ],
-                      ),
-                    ],
-                  ))
-            ],
-          );
-        }));
+                      ))
+                ],
+              );
+            }));
     }
   }
 
