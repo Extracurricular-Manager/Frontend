@@ -36,8 +36,6 @@ class MyApp extends ConsumerWidget  {
   Future<int> getData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     late int valorColor;
-    //print("123456789123456789123456789");
-    //print(prefs.getInt("1"));
     if(prefs.containsKey("1")){
       valorColor = prefs.getInt("1")!;
     }
@@ -70,7 +68,7 @@ class MyApp extends ConsumerWidget  {
                   onGenerateRoute: RouteGenerator.routes);
             }
             else{
-              return const Text("data");
+              return const Center(child: CircularProgressIndicator());
             }
         }
       ),
