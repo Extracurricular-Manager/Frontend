@@ -5,9 +5,7 @@ import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
 import 'package:frontendmobile/other/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class LoginViewDynamic extends ConsumerStatefulWidget {
-
   const LoginViewDynamic({Key? key}) : super(key: key);
 
   @override
@@ -34,10 +32,7 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: settings.colorSelected,
-        body: Center(
-            child:
-             userViewBuilder(settings.colorSelected)
-       ));
+        body: Center(child: userViewBuilder(settings.colorSelected)));
   }
 
   Widget userViewBuilder(Color colorSelected) {
@@ -69,41 +64,50 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                     controller: IdController,
                     focusNode: myFocusNode,
                     decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      focusedBorder:OutlineInputBorder(
-                        borderSide: BorderSide(color: colorSelected, width: 2.0),
-                      ),
-                      labelText: "Nom d’utilisateur",
-                      labelStyle: TextStyle(
-                        color: myFocusNode.hasFocus ? colorSelected : Colors.grey,
-
-                      )
-                    ),
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: colorSelected, width: 2.0),
+                        ),
+                        labelText: "Nom d’utilisateur",
+                        labelStyle: TextStyle(
+                          color: myFocusNode.hasFocus
+                              ? colorSelected
+                              : Colors.grey,
+                        )),
                     onChanged: (val) => uname = val,
                   ),
                   TextFormField(
                       controller: PwController,
                       focusNode: myFocusNode1,
                       decoration: InputDecoration(
-                          suffixIcon: IconButton(icon: Icon(visible ? Icons.visibility : Icons.visibility_off, color: colorSelected),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                                visible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: colorSelected),
                             onPressed: () {
                               setState(() {
-                                visible=!visible;
+                                visible = !visible;
                               });
-                            },),
-                        focusedBorder:OutlineInputBorder(
-                          borderSide: BorderSide(color: colorSelected, width: 2.0),
-                        ),
-                        border: OutlineInputBorder(),
-                        labelText: "Mot de passe",
-                        labelStyle: TextStyle(
-                          color: myFocusNode1.hasFocus ? colorSelected : Colors.grey,
-                        )
-                      ),
+                            },
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: colorSelected, width: 2.0),
+                          ),
+                          border: OutlineInputBorder(),
+                          labelText: "Mot de passe",
+                          labelStyle: TextStyle(
+                            color: myFocusNode1.hasFocus
+                                ? colorSelected
+                                : Colors.grey,
+                          )),
                       obscureText: visible,
                       onChanged: (val) => pwd = val
-                    //controller: ,
-                  ),
+                      //controller: ,
+                      ),
                   Wrap(
                     spacing: 8,
                     direction: Axis.horizontal,
@@ -223,70 +227,119 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
       case LoginUiState.caching:
         return Container(); // TODO: Handle this case.
       case LoginUiState.forgot:
-        return Container(child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        return Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Column(
                 children: <Widget>[
                   Container(
-                    height: constraints.biggest.height * 0.15,
-                    width: constraints.biggest.width,
-                    child: Text("Mot de passe oublié ?",
-                        style: TextStyle(
-                            fontSize: 17 * MediaQuery.of(context).textScaleFactor,
-                            fontWeight: FontWeight.bold,
-                            color: colorSelected)),
-                  ),
-                  const Text(
-                    "Si vous validez la sélection, une demande de modificaiton de mot de passe sera envoyée.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: constraints.biggest.height * 0.05),
-                  Container(
-                    height: constraints.biggest.height * 0.24,
-                    width: constraints.biggest.width,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Nom d’utilisateur",
-                      ),
-                      //controller: ,
+                    constraints:
+                        const BoxConstraints(maxWidth: 400, maxHeight: 300),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10), // radius of 10
+                        color: Colors.white // green as background color
+                        ),
+                    child: Form(
+                      child: LayoutBuilder(builder:
+                          (BuildContext context, BoxConstraints constraints) {
+                        return Card(
+                            elevation: 5,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: constraints.biggest.width * 0.1,
+                                  vertical: constraints.biggest.height * 0.065),
+                              child: LayoutBuilder(builder:
+                                  (BuildContext context,
+                                      BoxConstraints constraints) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: constraints.biggest.height * 0.15,
+                                      width: constraints.biggest.width,
+                                      child: Text("Mot de passe oublié ?",
+                                          style: TextStyle(
+                                              fontSize: 17 *
+                                                  MediaQuery.of(context)
+                                                      .textScaleFactor,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xFF214A1F))),
+                                    ),
+                                    const Text(
+                                      "Si vous validez la sélection, une demande de modificaiton de mot de passe sera envoyée.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            constraints.biggest.height * 0.05),
+                                    Container(
+                                      height: constraints.biggest.height * 0.24,
+                                      width: constraints.biggest.width,
+                                      child: TextFormField(
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: "Nom d’utilisateur",
+                                        ),
+                                        //controller: ,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            constraints.biggest.height * 0.06),
+                                    SizedBox(
+                                        height:
+                                            constraints.biggest.height * 0.24,
+                                        width: constraints.biggest.width,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          // ignore: prefer_const_literals_to_create_immutables
+                                          children: [
+                                            Wrap(
+                                              spacing: 8,
+                                              direction: Axis.horizontal,
+                                              alignment: WrapAlignment.center,
+                                              children: [
+                                                MaterialButton(
+                                                  color: Colors.green,
+                                                  child:
+                                                      const Text("Poursuivre"),
+                                                  textColor: Colors.white,
+                                                  onPressed: () => {},
+                                                ),
+                                                MaterialButton(
+                                                  color: Colors.red,
+                                                  child: const Text("Annuler"),
+                                                  textColor: Colors.white,
+                                                  onPressed: () => {
+                                                    setState(() {
+                                                      changeState(
+                                                          LoginUiState.login);
+                                                    })
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ))
+                                  ],
+                                );
+                              }),
+                            ));
+                      }),
                     ),
-                  ),
-                  SizedBox(height: constraints.biggest.height * 0.06),
-                  SizedBox(
-                      height: constraints.biggest.height * 0.24,
-                      width: constraints.biggest.width,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Wrap(
-                            spacing: 8,
-                            direction: Axis.horizontal,
-                            alignment: WrapAlignment.center,
-                            children: [
-                              MaterialButton(
-                                color: Colors.green,
-                                child: const Text("Poursuivre"),
-                                textColor: Colors.white,
-                                onPressed: () => {},
-                              ),
-                              MaterialButton(
-                                  color: Colors.red,
-                                  child: const Text("Annuler"),
-                                  textColor: Colors.white,
-                                  onPressed: () => {
-                                    Navigator.pop(context),
-                                  })
-                            ],
-                          ),
-                        ],
-                      ))
+                  )
                 ],
-              );
-            }));
+              ),
+            ],
+          ),
+        );
     }
   }
 
