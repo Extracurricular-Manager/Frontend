@@ -1,13 +1,13 @@
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 
-class Diet implements ApiDataClass {
+class Diets implements ApiDataClass {
   String? description;
   int? id;
   String? name;
 
-  Diet({this.description, this.id, this.name});
+  Diets({this.description, this.id, this.name});
 
-  Diet.fromJson(Map<String, dynamic> json) {
+  Diets.fromJson(Map<String, dynamic> json) {
     description = json['description'];
     id = json['id'];
     name = json['name'];

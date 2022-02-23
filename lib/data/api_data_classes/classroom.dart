@@ -1,6 +1,6 @@
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 
-class Classroom implements ApiDataClass{
+class Classroom implements ApiDataClass {
   int? id;
   String? name;
   String? professor;

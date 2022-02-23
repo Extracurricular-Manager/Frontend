@@ -1,6 +1,6 @@
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 
-class GradeLevel implements ApiDataClass{
+class GradeLevel implements ApiDataClass {
   int? id;
   String? level;
 

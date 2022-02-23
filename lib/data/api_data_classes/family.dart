@@ -9,10 +9,10 @@ class Family implements ApiDataClass {
 
   Family(
       {this.id,
-        this.postalAdress,
-        this.referingParentName,
-        this.referingParentSurname,
-        this.telephoneNumber});
+      this.postalAdress,
+      this.referingParentName,
+      this.referingParentSurname,
+      this.telephoneNumber});
 
   Family.fromJson(Map<String, dynamic> json) {
     id = json['id'];
