@@ -52,12 +52,13 @@ class _DayNurseryViewState extends ConsumerState<DayNurseryView> {
     String? url = prefs.getString("server");
     String key = prefs.getString(url!)!;
     int? idService = prefs.getInt("choiceService");
-    final uri = Uri.parse(url + '/api/period-service/' + idService.toString()); // + "?date=" + now.year.toString() + "-"  + now.month.toString() + "-" + now.day.toString()
-    print(uri.toString());
+    final uri = Uri.parse(url + '/api/period-service/' + idService.toString() + "?date=2019-11-03"); // + "?date=" + now.year.toString() + "-"  + now.month.toString() + "-" + now.day.toString()
     final response = await http.get(
       uri,
       headers: {'authorization': 'Bearer ' + key},
     );
+    print("azertyuiop");
+    print(response.body);
     if (response.statusCode == 200) {
       return parsePresence(response.body);
     } else {
@@ -92,6 +93,7 @@ class _DayNurseryViewState extends ConsumerState<DayNurseryView> {
             return FutureBuilder<List<Period>>(
                 future: periods,
                 builder: (context, snapshot1) {
+                  print(snapshot1.data);
                   return FutureBuilder<String>(
                       future: mytitle,
                       builder: (context, snapshot2) {

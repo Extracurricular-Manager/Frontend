@@ -112,14 +112,14 @@ class _LoginViewDynamic extends ConsumerState<addServer> {
 
                     onPressed: () => {
                       add(urlServer.value.text, location.value.text),
-                      Navigator.popAndPushNamed(context, '/login_view')
+                      Navigator.pushNamed(context, '/login_view')
                     },
                   ),
                   MaterialButton(
                     color: Colors.white,
                     child: const Text("Annuler"),
                     textColor: colorSelected,
-                    onPressed: () => Navigator.popAndPushNamed(context, '/login_view'),
+                    onPressed: () => Navigator.pushNamed(context, '/login_view'),
                   ),
                 ],
               )
@@ -142,6 +142,7 @@ class _LoginViewDynamic extends ConsumerState<addServer> {
       else{
         prefs.setStringList("listServer", [URL]);
         prefs.setStringList("locationServer", [location]);
+        prefs.setString("server", URL);
       }
 
     }

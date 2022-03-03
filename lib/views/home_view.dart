@@ -135,8 +135,7 @@ class _PreparedGridViewState extends State<PreparedGridView> {
     "restaurant": Icons.restaurant,
     "celebration": Icons.celebration,
     "luggage": Icons.luggage,
-    "bakery_dining": Icons.wb_sunny,
-    "egg": Icons.bedtime,
+    "bedtime": Icons.bedtime,
     "castle": Icons.restaurant,
     "games": Icons.games,
   };

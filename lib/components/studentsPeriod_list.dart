@@ -21,9 +21,16 @@ class StudentsPeriodList extends StatefulWidget {
 
 class _StudentsPeriodListState extends State<StudentsPeriodList> {
 
+  @override
+  void initState() {
+    initiliazeMap(widget.students, mapChild);
+   // print(widget.students);
+   // print(widget.periodStudent);
+  }
+
   Queue child = Queue();
   bool uncheck = false;
-  Map<String, bool> mapChild = new Map();
+  Map<String, Period> mapChild = new Map();
 
   String query = '';
   List<ChildData> allArtists = [];
@@ -38,6 +45,18 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
     }
     uncheck = true;
   }
+
+  void initiliazeMap(List<ChildData> childs, Map<String, Period> mapC) {
+    for (var child in childs) {
+      for(var i = 0; i<widget.periodStudent.length;i++){
+       /* if(widget.periodStudent[i].child.name == child.name
+            && widget.periodStudent[i].child.surname == child.surname){
+          mapC[child.name + " " + child.surname] = widget.periodStudent[i];
+        }*/
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,24 +113,28 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
                           ],
                         ),
                         Row(
-                          children: const [
-                            Text(
+                          children:  [
+                            const Text(
                               "Arrivé",
                               style: TextStyle(color: Colors.black),
                             ),
                             TextButton(
                                 onPressed: null,
                                 child:
-                                  Text("16h30")
+                                  Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
+                                      mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival :
+                                  "Non Arrivé")
                             ),
-                            Text(
+                            const Text(
                               "Départ",
                               style: TextStyle(color: Colors.black),
                             ),
                             TextButton(
                                 onPressed: null,
                                 child:
-                                Text("16h30")
+                                Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
+                                mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture :
+                                "Non Arrivé")
                             ),
                           ],
                         )

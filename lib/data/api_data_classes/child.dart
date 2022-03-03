@@ -5,8 +5,8 @@ class ChildData implements ApiDataClass {
   late String name;
   late String surname;
   late String birthday;
-  late Classroom classroom;
-  late Adelphie adelphie;
+ // late Classroom classroom;
+  //late Adelphie adelphie;
   late GradeLevel gradeLevel;
   //late List<Diet> diets;
   //late Facturation facturation;
@@ -16,8 +16,8 @@ class ChildData implements ApiDataClass {
       required this.name,
       required this.surname,
       required this.birthday,
-      required this.classroom,
-      required this.adelphie,
+     // required this.classroom,
+     // required this.adelphie,
      // required this.diets,
       required this.gradeLevel,
       //required this.facturation
@@ -29,8 +29,8 @@ class ChildData implements ApiDataClass {
         name: json['name'] as String,
         surname: json['surname'] as String,
         birthday: json['birthday'] as String,
-        classroom: Classroom.fromJson(json['classroom']),//json['classroom'] as Classroom,
-        adelphie: Adelphie.fromJson(json['adelphie']),
+       // classroom: Classroom.fromJson(json['classroom']),//json['classroom'] as Classroom,
+       // adelphie: Adelphie.fromJson(json['adelphie']),
         gradeLevel: GradeLevel.fromJson(json['gradeLevel']),
         //diets: json[Diet.fromJson(json['diets'])] as List<Diet>,
         //facturation: Facturation.fromJson(json['facturation'])
@@ -44,8 +44,8 @@ class ChildData implements ApiDataClass {
     data['name'] = name;
     data['surname'] = surname;
     data['birthday'] = birthday;
-    data['classroom'] = classroom;
-    data['adelphie'] = adelphie;
+   // data['classroom'] = classroom;
+   // data['adelphie'] = adelphie;
    // data['diets'] = diets;
     data['gradeLevel'] = gradeLevel;
     //data['facturation'] = facturation;
