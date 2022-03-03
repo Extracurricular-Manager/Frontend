@@ -7,23 +7,23 @@ class Period implements ApiDataClass {
   final int id;
   final int serviceId;
   //final String name;
-  final String timeOfArrival;
-  final String timeOfDeparture;
-  final String timeOfStartBilling;
-  //final ChildData child;
+  final timeOfArrival;
+  final timeOfDeparture;
+  final timeOfStartBilling;
+  final ChildData child;
 
   Period(
-      {required this.id, required this.serviceId,/* required this.name,*/ required this.timeOfArrival, required this.timeOfDeparture, required this.timeOfStartBilling/*, required this.child*/});
+      {required this.id, required this.serviceId,/* required this.name,*/ required this.timeOfArrival, required this.timeOfDeparture, required this.timeOfStartBilling, required this.child});
 
   factory Period.fromJson(Map<String, dynamic> json) {
     return Period(
       id: json['id'] as int,
       serviceId: json['serviceId'] as int,
       //name: json['name'] as String,
-      timeOfArrival: json['timeOfArrival'] as String,
-      timeOfDeparture: json['timeOfDeparture'] as String,
-      timeOfStartBilling: json['timeOfStartBilling'] as String,
-     // child: ChildData.fromJson(json["child"]),
+      timeOfArrival: json['timeOfArrival'],
+      timeOfDeparture: json['timeOfDeparture'],
+      timeOfStartBilling: json['timeOfStartBilling'],
+      child: ChildData.fromJson(json["child"]),
     );
   }
 
@@ -36,7 +36,7 @@ class Period implements ApiDataClass {
     data['timeOfArrival'] = timeOfArrival;
     data['timeOfDeparture'] = timeOfDeparture;
     data['timeOfStartBilling'] = timeOfStartBilling;
-    //data['child'] = child;
+    data['child'] = child;
     return data;
   }
 }

@@ -44,7 +44,7 @@ class _DayNurseryViewState extends ConsumerState<DayNurseryView> {
 
   List<Period> parsePresence(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<ChildData>((json) => Period.fromJson(json)).toList();
+    return parsed.map<Period>((json) => Period.fromJson(json)).toList();
   }
 
   Future<List<Period>> fetchPeriod() async {
@@ -57,8 +57,6 @@ class _DayNurseryViewState extends ConsumerState<DayNurseryView> {
       uri,
       headers: {'authorization': 'Bearer ' + key},
     );
-    print("azertyuiop");
-    print(response.body);
     if (response.statusCode == 200) {
       return parsePresence(response.body);
     } else {
@@ -93,6 +91,7 @@ class _DayNurseryViewState extends ConsumerState<DayNurseryView> {
             return FutureBuilder<List<Period>>(
                 future: periods,
                 builder: (context, snapshot1) {
+                  print("ICI");
                   print(snapshot1.data);
                   return FutureBuilder<String>(
                       future: mytitle,

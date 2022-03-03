@@ -24,8 +24,6 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
   @override
   void initState() {
     initiliazeMap(widget.students, mapChild);
-   // print(widget.students);
-   // print(widget.periodStudent);
   }
 
   Queue child = Queue();
@@ -49,10 +47,10 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
   void initiliazeMap(List<ChildData> childs, Map<String, Period> mapC) {
     for (var child in childs) {
       for(var i = 0; i<widget.periodStudent.length;i++){
-       /* if(widget.periodStudent[i].child.name == child.name
+        if(widget.periodStudent[i].child.name == child.name
             && widget.periodStudent[i].child.surname == child.surname){
           mapC[child.name + " " + child.surname] = widget.periodStudent[i];
-        }*/
+        }
       }
     }
   }
@@ -122,7 +120,8 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
                                 onPressed: null,
                                 child:
                                   Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
-                                      mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival :
+                                      mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival[3].toString() + "H"
+                                  + mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival[4].toString() :
                                   "Non Arrivé")
                             ),
                             const Text(
@@ -133,7 +132,8 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
                                 onPressed: null,
                                 child:
                                 Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
-                                mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture :
+                                mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture[3].toString() + "H"
+                                    + mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture[4].toString() :
                                 "Non Arrivé")
                             ),
                           ],

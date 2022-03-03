@@ -31,12 +31,6 @@ class HomeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(title);
-    print(path);
-    print(idService);
-    print(nameService);
-    print(subtitle);
-    print(iconName);
     var elev = 5.0;
     return Card(
       elevation: elev,
