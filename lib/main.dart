@@ -59,10 +59,13 @@ class MyApp extends ConsumerWidget  {
 
   Future<int> getData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    late int valorColor;
-    var url = "Color" + prefs.getString("server")!;
-    if(prefs.containsKey(url)){
-      valorColor = prefs.getInt(url)!;
+    late int valorColor = 0xFF214A1F;
+    var url;
+    if(prefs.containsKey("server")){
+       url = "Color" + prefs.getString("server")!;
+      if(prefs.containsKey(url)){
+        valorColor = prefs.getInt(url)!;
+      }
     }
     else{
       valorColor = 0xFF214A1F;
@@ -84,7 +87,7 @@ class MyApp extends ConsumerWidget  {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     log.v("Booting app...");
-    SharedPrefsStorage<String>.primitive(itemKey: "serverIP").save("http://148.60.11.219");
+    //SharedPrefsStorage<String>.primitive(itemKey: "serverIP").save("http://148.60.11.219");
     log.v("Auto sync");
     ApiCommons.sendToBack();
     final settings = ref.watch(settingsProvider);
@@ -116,6 +119,7 @@ class MyApp extends ConsumerWidget  {
             }
             else{
               return const Center(child: CircularProgressIndicator());
+              //return Text("DATA");
             }
         }
       ),

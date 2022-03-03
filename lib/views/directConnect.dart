@@ -15,10 +15,20 @@ class directConnect extends ConsumerStatefulWidget {
 }
 
 class _directConnectState extends ConsumerState<directConnect> {
+
   Future<bool> fetchServices() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("ICI123");
     String? url = prefs.getString("server");
-    String key = prefs.getString(url!)!;
+    print("ICI123456");
+    String key;
+    if(prefs.containsKey(url!)){
+      key = prefs.getString(url)!;
+    }
+    else{
+      return false;
+    }
+    print("ICI123567895441");
     print(url);
     print(key);
     final response = await http.get(
@@ -28,20 +38,22 @@ class _directConnectState extends ConsumerState<directConnect> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 204) {
+      print("DEBUT");
       return true;
     } else {
+      print("FIN");
       return false;
     }
   }
 
   Future<int> takeColor() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("1");
     var url = "Color" + prefs.getString("server")!;
     if(prefs.containsKey(url)){
-      print("ICI 1");
       return prefs.getInt(url)!;
     }
-    print("ICI 2");
+    print("2");
     return 0xFF214A1F;
   }
 
