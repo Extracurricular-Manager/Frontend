@@ -119,7 +119,6 @@ class MyApp extends ConsumerWidget  {
             }
             else{
               return const Center(child: CircularProgressIndicator());
-              //return Text("DATA");
             }
         }
       ),

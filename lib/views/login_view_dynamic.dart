@@ -182,13 +182,13 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                         color: Colors.white,
                         child: const Text("Changer d'école"),
                         textColor: colorSelected,
-                        onPressed: () => {Navigator.popAndPushNamed(context, '/choice')},
+                        onPressed: () => {Navigator.pushNamed(context, '/choice')},
                       ),
                       MaterialButton(
                         color: colorSelected,
                         child: const Text("Ajouter mon école"),
                         textColor: Colors.white,
-                        onPressed: () => {Navigator.popAndPushNamed(context, '/addServer')},
+                        onPressed: () => {Navigator.pushNamed(context, '/addServer')},
                       ),
                     ],
                   )
@@ -274,7 +274,7 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
               children: [
                 MaterialButton(
                   onPressed: () =>
-                      Navigator.popAndPushNamed(context, "/login_view"),
+                      Navigator.pushNamed(context, "/login_view"),
                   color: Colors.white,
                   textColor: colorSelected,
                   child: const Text("Réessayer"),
@@ -362,7 +362,7 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
   void loginAction() {
     if(SignUp){
       toggleView();
-      Navigator.popAndPushNamed(context, '/home_view');
+      Navigator.pushNamed(context, '/home_view');
     }
     else{
       print("CONNEXION IMPOSSIBLE");

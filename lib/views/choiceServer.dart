@@ -91,14 +91,14 @@ class _LoginViewDynamic extends ConsumerState<choiceServer> {
                                             onPressed: () => {
                                               settings.updateIntColor(getData(snapshot.data[index])),
                                               choiceServer(snapshot.data[index]),
-                                              Navigator.popAndPushNamed(
+                                              Navigator.pushNamed(
                                                   context, '/connectDirect'), //login_view
                                             },
                                             child: Text("Selectionner")),
                                         IconButton(
                                             onPressed: () => {
                                               deleteServer(index),
-                                              Navigator.popAndPushNamed(
+                                              Navigator.pushNamed(
                                                   context, '/login_view')
                                             },
                                             icon: Icon(Icons.delete))

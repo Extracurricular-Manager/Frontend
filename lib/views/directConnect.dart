@@ -87,7 +87,7 @@ class _directConnectState extends ConsumerState<directConnect> {
                       onGenerateRoute: RouteGenerator.routes);
                 } else {
                   return const Center(
-                      child: Text("data")); // CircularProgressIndicator());
+                      child: CircularProgressIndicator());
                 }
               });
         });

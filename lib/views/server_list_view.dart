@@ -66,8 +66,8 @@ class ServerListView extends ConsumerWidget {
                                       IconButton(
                                           onPressed: () => {
                                             deleteServer(index),
-                                            Navigator.popAndPushNamed(
-                                                context, '/login_view')
+                                            Navigator.pushNamed(
+                                                context, '/choice')
                                           },
                                           icon: Icon(Icons.delete))
                                     ],
@@ -147,7 +147,7 @@ class _makeListTile extends ConsumerState<makeListTile>{
          /* settings.updateIntColor(getData(widget.serverUrl).hashCode),
           settings.updateColorSelected(Item("perso", Color(getData(widget.serverUrl).hashCode))),*/
           choiceServer(widget.serverUrl),
-          Navigator.popAndPushNamed(context, "/connectDirect"), //login_view
+          Navigator.pushNamed(context, "/connectDirect"), //login_view
         }
     );
   }
