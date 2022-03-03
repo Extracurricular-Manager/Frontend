@@ -70,13 +70,8 @@ class _ColorSettingsPageState extends ConsumerState<ColorSettingsPage> {
             child: const Text('Valider'),
             onPressed: () async{
               SharedPreferences prefs = await SharedPreferences.getInstance();
-              print(prefs.getInt("1"));
-              print("ICI");
-              //print(pickerColor.value);
-             // print(pickerColor.toString());
-             // print(pickerColor.hashCode);
-              prefs.setInt("1", pickerColor.hashCode);
-              print(prefs.getInt("1"));
+              var url = "Color" + prefs.getString("server")!;
+              prefs.setInt(url, pickerColor.hashCode);
               Item choiceColor = Item("perso", pickerColor);
               settings.updateColorSelected(choiceColor);
               Navigator.of(context).pop();

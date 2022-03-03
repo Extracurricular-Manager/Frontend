@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String path;
   final IconData iconName;
+  final int idService;
+  final String nameService;
 
   const HomeTile({
     Key? key,
     required this.title,
     required this.path,
+    required this.idService,
+    required this.nameService,
     required this.subtitle,
     required this.iconName,
   }) : super(key: key);
+
+  choiceService(int idService) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("choiceService", idService);
+  }
+
+  getNameService(String nameServ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("nameService", nameServ);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +37,8 @@ class HomeTile extends StatelessWidget {
       child: Container(
         child: InkWell(
           onTap: () {
+            choiceService(this.idService);
+            getNameService(this.nameService);
             Navigator.pushNamed(context, path);
           },
           child: Padding(

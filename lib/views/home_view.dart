@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendmobile/components/home_tile.dart';
@@ -5,18 +8,23 @@ import 'package:frontendmobile/components/large_home_tile.dart';
 import 'package:frontendmobile/data/api_abstraction/api_commons.dart';
 import 'package:frontendmobile/data/api_abstraction/storage_utils.dart';
 import 'package:frontendmobile/data/api_data_classes/child.dart';
+import 'package:frontendmobile/data/api_data_classes/services.dart';
 import 'package:frontendmobile/data/childEndpoint.dart';
 import 'package:frontendmobile/other/changeColor.dart';
 import 'package:frontendmobile/other/providers.dart';
 
-import 'login_view_dynamic.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontendmobile/data/api_data_classes/token.dart';
+
 
 class HomeView extends ConsumerWidget {
+
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ChildEndpoint().push(ChildData());
+    //ChildEndpoint().push(ChildData());
     final settings = ref.watch(settingsProvider);
     return Scaffold(
         appBar: AppBar(
@@ -52,17 +60,17 @@ class HomeView extends ConsumerWidget {
             ]),
         body: Stack(children: [
           Column(
-            children: const [
-              Expanded(child: PreparedGridView()),
-              Padding(
+            children:  [
+              Expanded(child: PreparedGridView(color: settings.colorSelected)),
+              const Padding(
                 padding: EdgeInsets.only(left: 8, right: 8),
                 child: LargeHomeTile(
                     onTapPath: "/student_view",
                     iconName: Icons.accessibility,
-                    title: "Title",
-                    subtitle: "Subtitle"),
+                    title: "Liste des élèves",
+                    subtitle: "Récapitulatif"),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top: 8, bottom: 22),
                 child: ButtomSyncStatusWidget(),
               ),
@@ -79,7 +87,7 @@ class HomeView extends ConsumerWidget {
         ]));
   }
 }
-
+/*
 class PreparedListView extends StatelessWidget {
   const PreparedListView({
     Key? key,
@@ -97,46 +105,113 @@ class PreparedListView extends StatelessWidget {
         return const LargeHomeTile(
             onTapPath: "/student_view",
             iconName: Icons.accessibility,
-            title: "Title",
-            subtitle: "Subtitle");
+            title: "Title1",
+            subtitle: "Récapitulatif");
       },
     ).build(context);
   }
-}
+}*/
 
-class PreparedGridView extends StatelessWidget {
-  const PreparedGridView({
-    Key? key,
+class PreparedGridView extends StatefulWidget {
+  var color;
+
+   PreparedGridView({
+    Key? key, required this.color
   }) : super(key: key);
 
   @override
+  State<PreparedGridView> createState() => _PreparedGridViewState();
+}
+
+class _PreparedGridViewState extends State<PreparedGridView> {
+
+  Map<String, IconData> iconMap = {
+    "child_care": Icons.child_care,
+    "wb_sunny": Icons.wb_sunny,
+    "emoji_events": Icons.emoji_events,
+    "sports_handball": Icons.sports_handball,
+    "sports_esports": Icons.sports_esports,
+    "local_hospital ": Icons.local_hospital ,
+    "restaurant": Icons.restaurant,
+    "celebration": Icons.celebration,
+    "luggage": Icons.luggage,
+    "bakery_dining": Icons.wb_sunny,
+    "egg": Icons.bedtime,
+    "castle": Icons.restaurant,
+    "games": Icons.games,
+  };
+
+  List<Services> parseServices(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Services>((json) => Services.fromJson(json)).toList();
+  }
+
+  Future<List<Services>> fetchServices() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? url = prefs.getString("server");
+    String key = prefs.getString(url!)!;
+    final response = await http.get(
+        Uri.parse(url + '/api/services'),
+        headers: {
+          'authorization': 'Bearer ' + key,
+        },
+    );
+    if (response.statusCode == 200) {
+      return parseServices(response.body);
+    }
+    else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  late final Future<List<Services>> myServices;
+
+  @override
+  void initState() {
+    super.initState();
+    myServices = fetchServices();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: MediaQuery.of(context).size.width ~/ 180,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      children: const [
-        HomeTile(
-          title: "title",
-          path: "/night_nusery_view",
-          subtitle: "subtitle",
-          iconName: Icons.accessibility,
-        ),
-        HomeTile(
-          title: "title",
-          path: "/night_nusery_view",
-          subtitle: "subtitle",
-          iconName: Icons.accessibility,
-        ),
-        //Presence(currentItem: SelectedItem.notSelected,),
-        HomeTile(
-          title: "title",
-          path: "/night_nusery_view",
-          subtitle: "subtitle",
-          iconName: Icons.accessibility,
-        )
-      ],
+    return FutureBuilder<List<Services>>(
+        future: myServices,
+        builder: (context, snapshot){
+          if (snapshot.hasData) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: MediaQuery.of(context).size.width ~/ 180,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              itemCount: snapshot.data?.length,
+              itemBuilder: (BuildContext ctx, index) {
+                String chemin;
+                if(snapshot.data![index].model == 'presence'){
+                    chemin = "/canteen_view";
+                }
+                else{
+                    chemin = "/day_nursery_view";
+                }
+                //IconData test = IconData() as IconData; //snapshot.data![index].icon.
+                return HomeTile(
+                  title: snapshot.data![index].name,
+                  path: chemin,
+                  subtitle: snapshot.data![index].model == "period" ? "Horaire" : "Présence",
+                  iconName: iconMap[snapshot.data![index].icon]!,//portrait,
+                  idService:  snapshot.data![index].id,
+                  nameService: snapshot.data![index].name,
+                );
+              },
+            );
+          }
+          else{
+            return Center(child: CircularProgressIndicator(
+              backgroundColor: widget.color,
+            ));
+          }
+      }
     );
   }
 }

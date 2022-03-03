@@ -10,18 +10,11 @@ class NightNurseryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
-    List<String> students = [
-      "Erreur d'affichage",
-      "Arthur",
-      "Curtis",
-      "Guillaume",
-      "Sara"
-    ];
-    // ignore: prefer_const_constructors
-    return StudentsList(
+   /* return StudentsList(
       title: 'Garderie Soir',
       students: students,
       choiceColor: settings.colorSelected,
-    );
+    );*/
+    return Text("data");
   }
 }

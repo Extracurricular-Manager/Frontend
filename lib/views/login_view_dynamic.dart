@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendmobile/data/api_abstraction/network_utils.dart';
+import 'package:frontendmobile/data/api_data_classes/token.dart';
 import 'package:frontendmobile/other/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:http/http.dart' as http;
 
 
 class LoginViewDynamic extends ConsumerStatefulWidget {
@@ -19,14 +25,43 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
 
   FocusNode myFocusNode = new FocusNode();
   FocusNode myFocusNode1 = new FocusNode();
-  bool visible = false;
+  bool visible = true;
+
+  fetchAlbum(String name, String mdp) async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? url = prefs.getString("server");
+     var params = {
+       "username": name,
+       "password": mdp,
+       "rememberMe": true
+     };
+     final jsonString = json.encode(params);
+     final uri = Uri.parse(url! + '/api/authenticate');
+     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+     final response = await http.post(uri, headers: headers, body: jsonString);
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        errorConnect = false;
+        String cle = response.body;
+        String finalcle = cle.substring(13,cle.length-2);
+        prefs.setString(url, finalcle);
+        SignUp = true;
+        loginAction();
+        return idtoken.fromJson(jsonDecode(response.body));
+      }
+      else{
+        setState(() {
+          errorConnect = true;
+        });
+
+      }
+  }
 
   @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
+  void initState() {
+    super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +71,42 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
         backgroundColor: settings.colorSelected,
         body: Center(
             child:
-             userViewBuilder(settings.colorSelected)
-       ));
+             userViewBuilder(settings.colorSelected),
+        )
+    );
+  }
+
+  String error = "";
+  final identificationConnect = TextEditingController();
+  final passwordConnect = TextEditingController();
+  bool SignUp = false;
+  bool errorConnect = false;
+
+  @override
+  void dispose() {
+    identificationConnect.dispose();
+    passwordConnect.dispose();
+    super.dispose();
+  }
+
+  void toggleView() {
+    setState(() {
+      error = '';
+      identificationConnect.text = '';
+      passwordConnect.text = '';
+      SignUp = false;
+    });
   }
 
   Widget userViewBuilder(Color colorSelected) {
-    late String pwd;
-    late String pwd2;
-    late String uname;
 
     switch (globalState) {
       case LoginUiState.loading:
         loginProcess().then((val) => {});
         return const CircularProgressIndicator(color: Colors.white);
       case LoginUiState.login:
-        final TextEditingController IdController = TextEditingController();
-        final TextEditingController PwController = TextEditingController();
+       // final TextEditingController IdController = TextEditingController();
+       // final TextEditingController PwController = TextEditingController();
         return Card(
             elevation: 5,
             child: Container(
@@ -66,7 +121,8 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                           fontWeight: FontWeight.bold,
                           color: colorSelected)),
                   TextFormField(
-                    controller: IdController,
+                    //controller: IdController,
+                    controller: identificationConnect,
                     focusNode: myFocusNode,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -76,13 +132,12 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                       labelText: "Nom d’utilisateur",
                       labelStyle: TextStyle(
                         color: myFocusNode.hasFocus ? colorSelected : Colors.grey,
-
                       )
                     ),
-                    onChanged: (val) => uname = val,
                   ),
                   TextFormField(
-                      controller: PwController,
+                     // controller: PwController,
+                      controller: passwordConnect,
                       focusNode: myFocusNode1,
                       decoration: InputDecoration(
                           suffixIcon: IconButton(icon: Icon(visible ? Icons.visibility : Icons.visibility_off, color: colorSelected),
@@ -101,9 +156,9 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                         )
                       ),
                       obscureText: visible,
-                      onChanged: (val) => pwd = val
                     //controller: ,
                   ),
+                  errorConnect ? Text("L’adresse e-mail ou votre mot de passe que vous avez saisie n’est pas correcte."):SizedBox(width: 0),
                   Wrap(
                     spacing: 8,
                     direction: Axis.horizontal,
@@ -112,13 +167,28 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                         color: colorSelected,
                         child: const Text("Connexion"),
                         textColor: Colors.white,
-                        onPressed: loginAction,
+                        onPressed: () => {
+                          //getKey(fetchAlbum(identificationConnect.value.text, passwordConnect.value.text)),
+                          fetchAlbum(identificationConnect.value.text, passwordConnect.value.text),
+                        }
                       ),
                       MaterialButton(
                         color: Colors.white,
                         child: const Text("Mot de passe oublié"),
                         textColor: colorSelected,
-                        onPressed: () => {changeState(LoginUiState.forgot)},
+                        onPressed: () => {changeState(LoginUiState.forgot),toggleView()},
+                      ),
+                      MaterialButton(
+                        color: Colors.white,
+                        child: const Text("Changer d'école"),
+                        textColor: colorSelected,
+                        onPressed: () => {Navigator.popAndPushNamed(context, '/choice')},
+                      ),
+                      MaterialButton(
+                        color: colorSelected,
+                        child: const Text("Ajouter mon école"),
+                        textColor: Colors.white,
+                        onPressed: () => {Navigator.popAndPushNamed(context, '/addServer')},
                       ),
                     ],
                   )
@@ -148,7 +218,6 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                     ),
                     obscureText: true,
                     initialValue: "",
-                    onChanged: (val) => uname = val,
                   ),
                   TextFormField(
                       decoration: const InputDecoration(
@@ -157,7 +226,7 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
                       ),
                       obscureText: true,
                       initialValue: "",
-                      onChanged: (val) => pwd = val),
+                  ),
                   Wrap(
                     spacing: 8,
                     direction: Axis.horizontal,
@@ -221,7 +290,7 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
           ],
         );
       case LoginUiState.caching:
-        return Container(); // TODO: Handle this case.
+        return Container();
       case LoginUiState.forgot:
         return Container(child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -291,14 +360,21 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
   }
 
   void loginAction() {
-    Navigator.popAndPushNamed(context, '/home_view');
-    //changeState(LoginUiState.login);
-
-    //postop avec 2 elemennt pour id et mdp après
+    if(SignUp){
+      toggleView();
+      Navigator.popAndPushNamed(context, '/home_view');
+    }
+    else{
+      print("CONNEXION IMPOSSIBLE");
+    }
   }
 
   void forgotAction() {
     changeState(LoginUiState.setPasswd);
+  }
+
+  void change(){
+    SignUp = true;
   }
 
   void resetAction() {}
@@ -319,5 +395,8 @@ class _LoginViewDynamic extends ConsumerState<LoginViewDynamic> {
     });
   }
 }
+
+
+
 
 enum LoginUiState { loading, login, setPasswd, forgot, offline, caching }
