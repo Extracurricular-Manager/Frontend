@@ -1,8 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/recherchelist.dart';
-import 'package:frontendmobile/components/search_bar.dart';
 import 'package:frontendmobile/data/api_data_classes/child.dart';
 import 'package:frontendmobile/data/api_data_classes/presence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,11 +47,11 @@ class _StudentsListState extends State<StudentsList> {
 
   void initiliazeMap(List<ChildData> childs, Map<String, bool> mapC) {
     for (var child in childs) {
-      mapC[child.name + " " + child.surname] = false;
+      mapC[child.name! + " " + child.surname!] = false;
       for(var i = 0; i<widget.presenceStudent.length;i++){
         if(widget.presenceStudent[i].child.name == child.name
             && widget.presenceStudent[i].child.surname == child.surname){
-          mapC[child.name + " " + child.surname] = widget.presenceStudent[i].presence;
+          mapC[child.name! + " " + child.surname!] = widget.presenceStudent[i].presence;
         }
       }
     }
@@ -62,27 +62,36 @@ class _StudentsListState extends State<StudentsList> {
     return parsed.map<Presences>((json) => Presences.fromJson(json)).toList();
   }
 
-  Future<List<Presences>> fetchPresence(int id, int service, String name, bool presence, String date, ChildData child) async {
+  Future<List<Presences>> fetchPresence(int id, int service, bool presence, String date, String name, String username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? url = prefs.getString("server");
     String key = prefs.getString(url!)!;
     int? idService = prefs.getInt("choiceService");
+    ChildData mychild = new ChildData();
+    for (var child in widget.students) {
+      if(child.name == name && child.surname == username){
+        mychild = child;
+      }
+    }
     // + "?date=" + now.year.toString() + "-"  + now.month.toString() + "-" + now.day.toString()
     final uri = Uri.parse(url + '/api/presence-service/' + idService.toString()
         + "?date=2019-11-03");
+    final headers = {
+                      HttpHeaders.contentTypeHeader: 'application/json',
+                      'authorization': 'Bearer ' + key
+                    };
     final response = await http.put(
       uri,
-      headers: {'authorization': 'Bearer ' + key},
-      body: jsonEncode(<String, dynamic>{
-        'id': id,
-        'serviceId': service,
-        'name': name,
+      headers: headers,
+      body:
+      jsonEncode(<String,dynamic>{
         'presence': presence,
-        'date': date,
-        'child': child,
+        'date': [2019,11,03],
+        'serviceId': service,
+        'child': mychild,
       }),
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return parsePresence(response.body);
     } else {
@@ -134,15 +143,27 @@ class _StudentsListState extends State<StudentsList> {
                     child:
                     CheckboxListTile(
                       title: Text(
-                        allArtists[index].name + " " + allArtists[index].surname,
+                        allArtists[index].name! + " " + allArtists[index].surname!,
                         style: const TextStyle(color: Colors.black),
                       ),
-                      value: mapChild[allArtists[index].name + " " + allArtists[index].surname],
+                      value: mapChild[allArtists[index].name! + " " + allArtists[index].surname!],
                       onChanged: (bool? value) {
                         setState(() {
-                          /*fetchPresence(widget.presenceStudent[0].id,widget.presenceStudent[0].serviceId,widget.presenceStudent[0].name,
-                          !value!,widget.presenceStudent[0].date,allArtists[index]);*/
-                          mapChild[allArtists[index].name + " " + allArtists[index].surname] = value!;
+                          for(var presStudent in widget.presenceStudent){
+                            if(presStudent.child.name == allArtists[index].name! &&
+                                presStudent.child.surname == allArtists[index].surname!){
+                                  fetchPresence(presStudent.id,
+                                      presStudent.serviceId,
+                                      value!,
+                                      "2019-11-03",
+                                      allArtists[index].name!,
+                                      allArtists[index].surname!);
+                            }
+                            else{
+
+                            }
+                          }
+                          mapChild[allArtists[index].name! + " " + allArtists[index].surname!] = value!;
                           if (value) {
                             child.add(allArtists[index]);
                           } else {
@@ -183,9 +204,9 @@ class _StudentsListState extends State<StudentsList> {
       String query, List<ChildData> artistsTest) {
 
       final artists = artistsTest.where((artist) {
-        String nameSurname = artist.name + " " + artist.surname;
-        final nameLower = artist.name.toLowerCase();
-        final villeLower = artist.surname.toLowerCase();
+        String nameSurname = artist.name! + " " + artist.surname!;
+        final nameLower = artist.name!.toLowerCase();
+        final villeLower = artist.surname!.toLowerCase();
         final ville1Lower = nameSurname.toLowerCase();
         final searchLower = query.toLowerCase();
 

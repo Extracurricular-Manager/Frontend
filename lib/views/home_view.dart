@@ -138,6 +138,8 @@ class _PreparedGridViewState extends State<PreparedGridView> {
     "bedtime": Icons.bedtime,
     "castle": Icons.restaurant,
     "games": Icons.games,
+    "bakery_dining": Icons.wb_sunny,
+    "egg": Icons.bedtime,
   };
 
   List<Services> parseServices(String responseBody) {

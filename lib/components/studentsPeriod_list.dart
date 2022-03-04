@@ -1,10 +1,13 @@
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontendmobile/components/recherchelist.dart';
-import 'package:frontendmobile/components/search_bar.dart';
 import 'package:frontendmobile/data/api_data_classes/child.dart';
 import 'package:frontendmobile/data/api_data_classes/period.dart';
 import 'package:frontendmobile/data/api_data_classes/presence.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class StudentsPeriodList extends StatefulWidget {
   final String title;
@@ -12,7 +15,12 @@ class StudentsPeriodList extends StatefulWidget {
   final List<Period> periodStudent;
   final Color choiceColor;
 
-  const StudentsPeriodList({Key? key, required this.title, required this.students, required this.choiceColor, required this.periodStudent})
+  const StudentsPeriodList(
+      {Key? key,
+      required this.title,
+      required this.students,
+      required this.choiceColor,
+      required this.periodStudent})
       : super(key: key);
 
   @override
@@ -20,7 +28,6 @@ class StudentsPeriodList extends StatefulWidget {
 }
 
 class _StudentsPeriodListState extends State<StudentsPeriodList> {
-
   @override
   void initState() {
     initiliazeMap(widget.students, mapChild);
@@ -46,15 +53,62 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
 
   void initiliazeMap(List<ChildData> childs, Map<String, Period> mapC) {
     for (var child in childs) {
-      for(var i = 0; i<widget.periodStudent.length;i++){
-        if(widget.periodStudent[i].child.name == child.name
-            && widget.periodStudent[i].child.surname == child.surname){
-          mapC[child.name + " " + child.surname] = widget.periodStudent[i];
+      for (var i = 0; i < widget.periodStudent.length; i++) {
+        if (widget.periodStudent[i].child.name == child.name &&
+            widget.periodStudent[i].child.surname == child.surname) {
+          mapC[child.name! + " " + child.surname!] = widget.periodStudent[i];
         }
       }
     }
   }
 
+  List<Period> parsePeriod(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Period>((json) => Period.fromJson(json)).toList();
+  }
+
+  Future<List<Period>> fetchPeriod(
+      /*int id, String timeOfArrival, String timeOfDeparture, String timeOfStartBilling,*/
+      String name,
+      String username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? url = prefs.getString("server");
+    String key = prefs.getString(url!)!;
+    int? idService = prefs.getInt("choiceService");
+    ChildData mychild = new ChildData();
+    for (var child in widget.students) {
+      if (child.name == name && child.surname == username) {
+        mychild = child;
+      }
+    }
+    // + "?date=" + now.year.toString() + "-"  + now.month.toString() + "-" + now.day.toString()
+    final uri = Uri.parse(url +
+        '/api/period-service/' +
+        idService.toString() +
+        "?date=2019-11-03");
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      'authorization': 'Bearer ' + key
+    };
+    final response = await http.put(
+      uri,
+      headers: headers,
+      body: jsonEncode(<String, dynamic>{
+        'id': 3,
+        'serviceId': 0,
+        'timeOfArrival': [2019, 11, 3, 6, 30],
+        'timeOfDeparture': [2019, 11, 3, 11, 30],
+        'timeOfStartBilling': [2019, 11, 3, 6, 30],
+        'child': mychild,
+      }),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return parsePeriod(response.body);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,66 +139,87 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
               preferredSize: const Size.fromHeight(50.0), child: buildSearch()),
         ),
         body: ListView(children: [
-          Builder(
-            builder: (context) {
-              buildSearch();
-              allArtists = searchArtistList(query, widget.students);
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemCount: allArtists.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child:
-                    Column(
+          Builder(builder: (context) {
+            buildSearch();
+            allArtists = searchArtistList(query, widget.students);
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              itemCount: allArtists.length,
+              itemBuilder: (context, index) {
+                return Card(
+                    child: Column(
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              allArtists[index].name + " " + allArtists[index].surname,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              allArtists[index].gradeLevel.level,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ],
+                        Text(
+                          allArtists[index].name! +
+                              " " +
+                              allArtists[index].surname!,
+                          style: const TextStyle(color: Colors.black),
                         ),
-                        Row(
-                          children:  [
-                            const Text(
-                              "Arrivé",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextButton(
-                                onPressed: null,
-                                child:
-                                  Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
-                                      mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival[3].toString() + "H"
-                                  + mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfArrival[4].toString() :
-                                  "Non Arrivé")
-                            ),
-                            const Text(
-                              "Départ",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            TextButton(
-                                onPressed: null,
-                                child:
-                                Text(mapChild[allArtists[index].name + " " + allArtists[index].surname] != null ?
-                                mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture[3].toString() + "H"
-                                    + mapChild[allArtists[index].name + " " + allArtists[index].surname]!.timeOfDeparture[4].toString() :
-                                "Non Arrivé")
-                            ),
-                          ],
-                        )
+                        Text(
+                          allArtists[index].gradeLevel!.level!,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          "Arrivé",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextButton(
+                            onPressed: null,
+                            child: Text(mapChild[allArtists[index].name! +
+                                        " " +
+                                        allArtists[index].surname!] !=
+                                    null
+                                ? mapChild[allArtists[index].name! +
+                                            " " +
+                                            allArtists[index].surname!]!
+                                        .timeOfArrival[3]
+                                        .toString() +
+                                    "H" +
+                                    mapChild[allArtists[index].name! +
+                                            " " +
+                                            allArtists[index].surname!]!
+                                        .timeOfArrival[4]
+                                        .toString()
+                                : "Non Arrivé")),
+                        const Text(
+                          "Départ",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              fetchPeriod(allArtists[index].name!,
+                                  allArtists[index].surname!);
+                            },
+                            child: Text(mapChild[allArtists[index].name! +
+                                        " " +
+                                        allArtists[index].surname!] !=
+                                    null
+                                ? mapChild[allArtists[index].name! +
+                                            " " +
+                                            allArtists[index].surname!]!
+                                        .timeOfDeparture[3]
+                                        .toString() +
+                                    "H" +
+                                    mapChild[allArtists[index].name! +
+                                            " " +
+                                            allArtists[index].surname!]!
+                                        .timeOfDeparture[4]
+                                        .toString()
+                                : "Non Arrivé")),
                       ],
                     )
-                  );
-                },
-              );
-            }
-          ),
+                  ],
+                ));
+              },
+            );
+          }),
           ElevatedButton(
             onPressed: emptyQueue,
             style: ElevatedButton.styleFrom(
@@ -152,15 +227,14 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
             ),
             child: const Text("Validez l'appel"),
           )
-        ])
-    );
+        ]));
   }
 
   Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: 'Prénom ou Nom',
-    onChanged: searchArtist,
-  );
+        text: query,
+        hintText: 'Prénom ou Nom',
+        onChanged: searchArtist,
+      );
 
   void searchArtist(String query) {
     setState(() {
@@ -168,13 +242,11 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
     });
   }
 
-  List<ChildData> searchArtistList(
-      String query, List<ChildData> artistsTest) {
-
+  List<ChildData> searchArtistList(String query, List<ChildData> artistsTest) {
     final artists = artistsTest.where((artist) {
-      String nameSurname = artist.name + " " + artist.surname;
-      final nameLower = artist.name.toLowerCase();
-      final villeLower = artist.surname.toLowerCase();
+      String nameSurname = artist.name! + " " + artist.surname!;
+      final nameLower = artist.name!.toLowerCase();
+      final villeLower = artist.surname!.toLowerCase();
       final ville1Lower = nameSurname.toLowerCase();
       final searchLower = query.toLowerCase();
 
@@ -184,5 +256,4 @@ class _StudentsPeriodListState extends State<StudentsPeriodList> {
     }).toList();
     return artists;
   }
-
 }

@@ -1,202 +1,198 @@
 import 'package:frontendmobile/data/api_abstraction/data_class.dart';
 
 class ChildData implements ApiDataClass {
-  late int id;
-  late String name;
-  late String surname;
-  late String birthday;
- // late Classroom classroom;
-  //late Adelphie adelphie;
-  late GradeLevel gradeLevel;
-  //late List<Diet> diets;
-  //late Facturation facturation;
+  int? id;
+  String? name;
+  String? surname;
+  String? birthday;
+  Classroom? classroom;
+  Adelphie? adelphie;
+  GradeLevel? gradeLevel;
+  List<Diets>? diets;
+  List<MonthPaid>? monthPaid;
 
   ChildData(
-      {required this.id,
-      required this.name,
-      required this.surname,
-      required this.birthday,
-     // required this.classroom,
-     // required this.adelphie,
-     // required this.diets,
-      required this.gradeLevel,
-      //required this.facturation
-    });
+      {this.id,
+      this.name,
+      this.surname,
+      this.birthday,
+      this.classroom,
+      this.adelphie,
+      this.gradeLevel,
+      this.diets,
+      this.monthPaid});
 
-  factory ChildData.fromJson(Map<String, dynamic> json) {
-    return ChildData(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        surname: json['surname'] as String,
-        birthday: json['birthday'] as String,
-       // classroom: Classroom.fromJson(json['classroom']),//json['classroom'] as Classroom,
-       // adelphie: Adelphie.fromJson(json['adelphie']),
-        gradeLevel: GradeLevel.fromJson(json['gradeLevel']),
-        //diets: json[Diet.fromJson(json['diets'])] as List<Diet>,
-        //facturation: Facturation.fromJson(json['facturation'])
-    );
+  ChildData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    surname = json['surname'];
+    birthday = json['birthday'];
+    classroom = json['classroom'] != null
+        ? new Classroom.fromJson(json['classroom'])
+        : null;
+    adelphie = json['adelphie'] != null
+        ? new Adelphie.fromJson(json['adelphie'])
+        : null;
+    gradeLevel = json['gradeLevel'] != null
+        ? new GradeLevel.fromJson(json['gradeLevel'])
+        : null;
+    if (json['diets'] != null) {
+      diets = <Diets>[];
+      json['diets'].forEach((v) {
+        diets!.add(new Diets.fromJson(v));
+      });
+    }
+    if (json['monthPaid'] != null) {
+      monthPaid = <MonthPaid>[];
+      json['monthPaid'].forEach((v) {
+        monthPaid!.add(new MonthPaid.fromJson(v));
+      });
+    }
   }
 
-  @override
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['surname'] = surname;
-    data['birthday'] = birthday;
-   // data['classroom'] = classroom;
-   // data['adelphie'] = adelphie;
-   // data['diets'] = diets;
-    data['gradeLevel'] = gradeLevel;
-    //data['facturation'] = facturation;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['surname'] = this.surname;
+    data['birthday'] = this.birthday;
+    if (this.classroom != null) {
+      data['classroom'] = this.classroom!.toJson();
+    }
+    if (this.adelphie != null) {
+      data['adelphie'] = this.adelphie!.toJson();
+    }
+    if (this.gradeLevel != null) {
+      data['gradeLevel'] = this.gradeLevel!.toJson();
+    }
+    if (this.diets != null) {
+      data['diets'] = this.diets!.map((v) => v.toJson()).toList();
+    }
+    if (this.monthPaid != null) {
+      data['monthPaid'] = this.monthPaid!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
-class Classroom{
+class Classroom implements ApiDataClass {
+  int? id;
+  String? name;
+  String? professor;
 
-  late int? id;
-  late String? name;
-  late String? professor;
+  Classroom({this.id, this.name, this.professor});
 
-  Classroom({
-     this.id,
-     this.name,
-     this.professor,
-  });
-
-  factory Classroom.fromJson(Map<String, dynamic> json) {
-    return Classroom(
-      id : json['id'] as int,
-      name : json['name'] as String,
-      professor : json['professor'] as String,
-    );
-
+  Classroom.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    professor = json['professor'];
   }
 
-  @override
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['professor'] = professor;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['professor'] = this.professor;
     return data;
   }
 }
 
-class Adelphie {
+class Adelphie implements ApiDataClass {
+  int? id;
+  String? referingParentName;
+  String? referingParentSurname;
+  String? telephoneNumber;
+  String? postalAdress;
 
-  late int id;
-  late String referingParentName;
-  late String referingParentSurname;
-  late String telephoneNumber;
-  late String postalAdress;
-
-  Adelphie({
-    required this.id,
-    required this.referingParentName,
-    required this.referingParentSurname,
-    required this.telephoneNumber,
-    required this.postalAdress,
-  });
+  Adelphie(
+      {this.id,
+      this.referingParentName,
+      this.referingParentSurname,
+      this.telephoneNumber,
+      this.postalAdress});
 
   Adelphie.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as int;
-    referingParentName = json['referingParentName'] as String;
-    referingParentSurname = json['referingParentSurname'] as String;
-    telephoneNumber = json['telephoneNumber'] as String;
-    postalAdress = json['postalAdress'] as String;
+    id = json['id'];
+    referingParentName = json['referingParentName'];
+    referingParentSurname = json['referingParentSurname'];
+    telephoneNumber = json['telephoneNumber'];
+    postalAdress = json['postalAdress'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['referingParentName'] = referingParentName;
-    data['referingParentSurname'] = referingParentSurname;
-    data['telephoneNumber'] = telephoneNumber;
-    data['postalAdress'] = postalAdress;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['referingParentName'] = this.referingParentName;
+    data['referingParentSurname'] = this.referingParentSurname;
+    data['telephoneNumber'] = this.telephoneNumber;
+    data['postalAdress'] = this.postalAdress;
     return data;
   }
 }
 
-class GradeLevel{
+class GradeLevel implements ApiDataClass {
+  int? id;
+  String? level;
 
-  late int id;
-  late String level;
-
-  GradeLevel({
-    required this.id,
-    required this.level,
-  });
+  GradeLevel({this.id, this.level});
 
   GradeLevel.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as int;
-    level = json['level'] as String;
+    id = json['id'];
+    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['level'] = level;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['level'] = this.level;
     return data;
   }
 }
 
-class Diet{
+class MonthPaid implements ApiDataClass {
+  int? id;
+  List<int>? date;
+  int? cost;
+  bool? payed;
 
-   int? id;
-   String? name;
-   String? description;
+  MonthPaid({this.id, this.date, this.cost, this.payed});
 
-  Diet({
-     this.id,
-     this.name,
-     this.description,
-  });
-
-  Diet.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as int;
-    name = json['name'] as String;
-    description = json['description'] as String;
+  MonthPaid.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    date = json['date'].cast<int>();
+    cost = json['cost'];
+    payed = json['payed'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['description'] = description;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['date'] = this.date;
+    data['cost'] = this.cost;
+    data['payed'] = this.payed;
     return data;
   }
 }
 
-class Facturation {
-  int id;
-  String schoolService;
-  int cost;
-  bool payed;
+class Diets implements ApiDataClass {
+  String? description;
+  int? id;
+  String? name;
 
-  Facturation(
-      {required this.id,
-      required this.schoolService,
-      required this.cost,
-      required this.payed});
+  Diets({this.description, this.id, this.name});
 
-  factory Facturation.fromJson(Map<String, dynamic> json) {
-    return Facturation(
-        id: json['id'] as int,
-        schoolService: json['schoolService'] as String,
-        cost: json['cost'] as int,
-        payed: json['payed'] as bool);
+  Diets.fromJson(Map<String, dynamic> json) {
+    description = json['description'];
+    id = json['id'];
+    name = json['name'];
   }
 
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-
+    data['description'] = description;
     data['id'] = id;
-    data['schoolService'] = schoolService;
-    data['cost'] = cost;
-    data['payed'] = payed;
+    data['name'] = name;
     return data;
   }
 }

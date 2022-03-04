@@ -89,8 +89,8 @@ class _LoginViewDynamic extends ConsumerState<choiceServer> {
                                         Text(snapshot.data[index]),
                                         TextButton(
                                             onPressed: () => {
-                                              settings.updateIntColor(getData(snapshot.data[index])),
                                               choiceServer(snapshot.data[index]),
+                                              settings.updateIntColor(getData(snapshot.data[index])),
                                               Navigator.pushNamed(
                                                   context, '/connectDirect'), //login_view
                                             },

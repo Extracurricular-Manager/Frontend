@@ -101,8 +101,8 @@ class _StudentViewState extends State<StudentView> {
                               ListTile(
                                 title: Row(
                                     children: [
-                                      Text(allArtists[index].name + " " + allArtists[index].surname + " "),
-                                      Text(allArtists[index].gradeLevel.level),
+                                      Text(allArtists[index].name! + " " + allArtists[index].surname! + " "),
+                                      Text(allArtists[index].gradeLevel!.level!),
                                     ]
                                 ),
                                 subtitle: Row(
@@ -166,11 +166,11 @@ class _StudentViewState extends State<StudentView> {
       String query, List<ChildData> artistsTest) {
 
     final artists = artistsTest.where((artist) {
-      String nameSurname = artist.name + " " + artist.surname;
-      final nameLower = artist.name.toLowerCase();
-      final villeLower = artist.surname.toLowerCase();
+      String nameSurname = artist.name! + " " + artist.surname!;
+      final nameLower = artist.name!.toLowerCase();
+      final villeLower = artist.surname!.toLowerCase();
       final ville1Lower = nameSurname.toLowerCase();
-      final ville2 = artist.gradeLevel.level.toLowerCase();
+      final ville2 = artist.gradeLevel!.level!.toLowerCase();
       final searchLower = query.toLowerCase();
 
       return nameLower.contains(searchLower) ||

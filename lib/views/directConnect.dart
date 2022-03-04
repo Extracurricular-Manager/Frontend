@@ -48,12 +48,10 @@ class _directConnectState extends ConsumerState<directConnect> {
 
   Future<int> takeColor() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("1");
     var url = "Color" + prefs.getString("server")!;
     if(prefs.containsKey(url)){
       return prefs.getInt(url)!;
     }
-    print("2");
     return 0xFF214A1F;
   }
 

@@ -69,8 +69,8 @@ class StudentsBuilder extends StatefulWidget {
                           ListTile(
                             title: Row(
                               children: [
-                                Text(snapshot.data![index].name + snapshot.data![index].surname),
-                                Text(snapshot.data![index].gradeLevel.level),
+                                Text(snapshot.data![index].name! + snapshot.data![index].surname!),
+                                Text(snapshot.data![index].gradeLevel!.level!),
                               ]
                             ),
                             subtitle: Row(
